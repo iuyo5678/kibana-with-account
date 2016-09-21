@@ -24,14 +24,34 @@ coverage
 .lock-wscript
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
-build/Release
+build/
+target/
+optimize/bundles
+optimize/testdev
+optimize/testUiServer
 
 # Dependency directories
+.node_binaries
 node_modules
 jspm_packages
+esvm
+
 
 # Optional npm cache directory
 .npm
 
 # Optional REPL history
 .node_repl_history
+
+# ide configure
+.idea
+
+# trash file
+config/kibana.dev.yml
+.babelcache.json
+*.swp
+*.swo
+*.out
+test/output
+trash
+

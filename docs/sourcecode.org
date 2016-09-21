@@ -1,0 +1,236 @@
+#+BLOG: zgh-home
+#+DATE: [2016-08-24 Wednesday 10:44]
+#+OPTIONS: toc:nil num:nil todo:nil pri:nil tags:nil ^:nil
+#+SETUPFILE: ./org-html-themes/Setup/theme-readtheorg.setup
+#+CATEGORY: 前端
+#+TAGS: elk kibna 代码理解
+#+DESCRIPTION: 对kibana代码的一些个人理解，学习笔记
+#+TITLE: kibana 代码解析
+
+首先来说，大的node项目都比较难于维护，而我感觉kibana更加的难于维护， 首先是 js 语法太过灵活，特别是kibana一部分是用es6语法写的，而plugin中部分代码又不是，感觉比较混乱，2.另外使用调用babel库来将es6的语法转换为es5的语法来进行执行， 这样造成结果就是无法进行有效的调试，理解代码起来简直就是噩梦，为了加深理解，也为了造福后来人将我阅读代码的心得记录下来。记录比较杂乱，可能也存在不少谬误，希望不吝指正。
+** 准备工作
+kibana的代码版本为4.4.2,首先准备好代码。
+假定程序所在的根目录为kibana。下面都是使用此目录作为根目录。
+** 总体执行过程
+kibana执行命令是./bin/kibana, 这是一个shell脚本，主要功能是使用node调用js入口文件，kibna的js入口文件问"kibana/src/cli/index.js"， 该文件代码比较简单，主要是注册babel环境，然后执行文件"kibana/src/cli/cli.index"，该文件为kibana的真正入口，首先是使用Node的Commander库，具体可以参见[[lab-commander][这里]],生成一个自定义的Commander program，主要的选项添加一个 -server选项，代码在kibana/cli/server/server.js中，添加了-plugin选项在kibana/cli/plugin/plugin.js中，在cli.index末尾，在argv添加server选项，然后调用`program.parse(argv);`开始执行kibana程序。
+自定义的Commander执行主要代码为kibana/cli/server/server.js中，生成一个kbnServer，然后执行kbnServer.ready(), kbnServer的代码主要在文件kibana/src/server/KbnServer.js中，主要程序逻辑是kbnServer的ready中，通过mixin函数执行所有的require函数，在这里调用require的代码都如下格式module.exports = async (kbnServer, server, config) => {...}
+主要执行的过程如下：
+
+#+BEGIN_SRC js
+  // 加载相关的配置信息
+  require('./config/setup'), // sets this.config, reads this.settings
+  // 这一步配置http服务器相关信息，route connectconfig，本质是一个hapi.server
+  require('./http'), // sets this.server
+  // 配置logging
+  require('./logging'),
+  // 配置status页面，就是/status页面信息
+  require('./status'),
+  // 查找所有的有效plugin，并且放入kbnServer.plugins中
+  require('./plugins/scan'),
+  // 将所有的成功加载的插件打印在log中
+  require('./config/complete'),
+  // 这一步加载前端的所有页面显示
+  require('../ui'),
+  // ensure that all bundles are built, or that the
+  // lazy bundle server is running
+  require('../optimize'),
+  // finally, initialize the plugins
+  require('./plugins/initialize'),
+#+END_SRC
+
+上面就是简单概括kibana的执行过程。下面有几个重要的数据结构分别介绍下
+** piugins
+*** 数据结构
+<<kbnserver-plugins>>
+代码中kbnServer有个重要的数据结构，plugins <<kibana-plugins>>，是PluginCollection的一个实例（PluginCollection的代码在src/server/plugins/PluginCollection.js中）
+plugins基类是一个Collection(类定义在src/utils/Collection.js),再此类上扩展了一些插件相关功能。核心的数据结构是
+plugins[pluginApis] = new Set(); 其中pluginApis是一个symbol变量，定义：let pluginApis = Symbol('pluginApis');
+*** 初始化
+**** 准备工作
+kbnServer.plugins初始化代码主要在src/server/plugins/scan.js中，根据插件的路径进行初始化， 一般有两个路径：
+kibana/installedPlugins  和 kibana/src/plugins，
+然后readdir获取路径下的所有文件名称，然后resovle测试路径，如果路径为一个文件夹，添加到名为pluginPaths的一个数组中，
+然后对pluginPaths中的path通过require.resolve进行测试，如果可以加载的话，调用kbnServer.plugins.new(path)进行初始化
+**** kbnServer.plugins.new(path)函数
+首先生成一个api实例，<<plugin-api>> 然后将api添加进this.[pluginApis]中， 其中api具体信息参见下文相关类中的PluginApi，主要是其中Plugin变量实现有些geek，代码如下：
+
+#+BEGIN_SRC js
+  let api = new PluginApi(this.kbnServer, path);
+  this[pluginApis].add(api); 
+#+END_SRC
+执行完这一步，api.Plugin实际就变成一个Plugin类的构造函数，定义在kibaba/src/server/plugin/Plugin.js中。
+接下来，这一步是关键，其实是实例化api中plugin，代码如下： <<output-anchor>>
+#+BEGIN_SRC js
+  let output = [].concat(require(path)(api) || []);
+#+END_SRC
+具体过程这样的，首先还记得上一步中api中的变量[[geek-plugin][Plugin]]，返回一个构造函数参数为opt的类，这一步给path所在的plugin传入该api，然后就会执行该构造函数，返回一个Plugin实例。
+我们可以观察所有的plugin的index.js 的格式都如下这样的:
+#+BEGIN_SRC js
+  module.exports = function (kibana) {
+      return new kibana.Plugin({
+          // 各种 opt 信息，
+          // 其中kibana.Plugin为一个class ScopedPlugin extends Plugin，构造函数为：
+          // constructor(opts) {
+          //   super(kbnServer, path, pkg, opts || {});
+          // }
+          //
+      });
+
+  };
+#+END_SRC
+上面代码中的kibana就是传参进去的上文构造的[[plugin-api][api]]，在各个插件内部调用new kibane.Plugin()即调用了上文Plugin类的构造函数。
+
+具体调用过程如下：
+1. kibana/src/server/plugins/scan.js中await plugins.new(path)
+2. kibana/src/server/plugins/PluginCollection.js中require(path)(api)
+3. kibana/src/plugins/{path}/index.js中 return new kibana.Plugin(opt)
+4. kibana/src/server/plugins/Plugin.js中 class ScopedPlugin的constructor(opts)
+5. 同文件中的class Plugin的constructor(kbnServer, path, pkg, opts)。
+
+当opt中不存在的值，则赋值 _.noop,
+其中具体代码比较简单，如下所示：
+
+#+BEGIN_SRC js
+  this.id = opts.id || pkg.name;
+  this.uiExportsSpecs = opts.uiExports || {};
+  this.requiredIds = opts.require || [];
+  this.version = opts.version || pkg.version;
+  this.publicDir = opts.publicDir !== false ? resolve(path, 'public') : null;
+  this.externalCondition = opts.initCondition || _.constant(true);
+  this.externalInit = opts.init || _.noop;
+  this.getConfigSchema = opts.config || _.noop;
+  this.init = _.once(this.init);
+#+END_SRC
+
+其中插件的init赋值_.once(this.init);限制只被调用一次。
+
+某些插件只有在特殊情况下才会被调用，比如devMode，在src/plugins/devMode/index.js 中 if (!kibana.config.get('env.dev')) return; 这时就会返回空，这样[[output-anchor][output]]
+就为空，new函数就执行完成。大部分插件会返回一个Plugin，会被添加进入[[kibana-plugins][kbnServer.plugins]],然后会调用这个plugin的readConfig()方法，主要是生成该插件的config配置检测的joi对象。
+至此kbnServer.plugins.new(path)函数执行完成。
+
+*** 相关的类
+**** PluginApi
+定义在kibana/src/server/plugins/PluginApi.js, 核心的内部数据一下四个
+this.config = 当前kbnServer的config
+this.rootDir = 当前kbnServer的rootDir
+this.package = require(join(pluginPath, 'package.json'));
+this.autoload = require('../../ui/autoload');
+this.Plugin<<geek-plugin>> 这个变量注意一下，程序中返回一个Plugin的继承类ScopedPlugin，但是返回的这个类的构造方法变成了一个opt了，具体代码入下：
+#+BEGIN_SRC javascript
+  return class ScopedPlugin extends Plugin {
+        constructor(opts) {
+          super(kbnServer, path, pkg, opts || {});
+        }
+      };
+#+END_SRC
+这个比较geek，好像我接触其他的语言没有这种用方法
+**** Plugin
+定义在kibana/src/server/plugins/Plugin.js, 
+
+
+** UiExport kbnServer.uiExports
+*** 数据结构
+kibana的UI加载入口在src/ui/index.js文件中，主要存放在uiExports这个数据结构中，该数据结构是UiExports的实例，代码在kibana/src/ui/UiExports.js中，构造函数如下
+#+BEGIN_SRC js
+  constructor({ urlBasePath }) {
+      this.apps = new UiAppCollection(this);
+      this.aliases = {};
+      this.urlBasePath = urlBasePath;
+      this.exportConsumer = _.memoize(this.exportConsumer);
+      this.consumers = [];
+      this.bundleProviders = [];
+  }
+#+END_SRC
+构造函数比较简单。<<ui-apps>>重要的数据结构为apps，是一个 UiAppCollection类的实例，代码在kibana/src/ui/UiAppCollection.js中，具体参见[[ui-uiappcollection][这里]] 。
+首先生成一个[[ui-uibundlerenv][UiBundlerEnv]]对象，代码比较简单，接着调用 uiExports.addConsumer(bundlerEnv)方法，<<ui-addconsumer>>将此bundlerEnv添加进uiExports.consumers该数组中。
+接着对kbnServer.plugins中的每个plugin调用consumePlugin方法，具体代码如下：
+#+BEGIN_SRC js
+  for (let plugin of kbnServer.plugins) {
+      uiExports.consumePlugin(plugin);
+  }
+#+END_SRC
+其中kbnServer.plugins可以参考[[kbnserver-plugins][上文plugins]] 的相关信息。其中每个plugin都为一个kibana/src/server/plugins/Plugin.js的Plugin的实例。
+执行uiExports.consumePlugin函数，首先第一步 plugin.apps = new UiAppCollection(this);首先给plugin.apps赋值为一个 UiAppCollection(this)
+接下来主要是下面的程序：
+#+BEGIN_SRC js
+  for (let consumer of this.consumers) {
+      consumer.consumePlugin && consumer.consumePlugin(plugin);
+  }
+#+END_SRC
+[[ui-addconsumer][上面]]已经知道this.consumers是个数组，里面上面放入了bundlerEnv，所以这一步其实是执行bundlerEnv.consumePlugin(plugin)函数，主要功能是将相关信息添加进入bundlerEnv.aliases和bundlerEnv.pluginInfo。
+接着获取每个Plugin.uiExports的keys，代码： var types = _.keys(plugin.uiExportsSpecs); 然后对每个type执行函数exportConsumer，具体代码如下：
+#+BEGIN_SRC js
+  types.forEach((type) => {
+      this.exportConsumer(type)(plugin, plugin.uiExportsSpecs[type]);
+  });
+#+END_SRC
+exportConsumer函数首先会依次调用[[ui-addconsumer][this.consumers]]中每个consumer.exportConsumer,如果type属于：【loaders， postloaders， noParse，modules】，会执行相应的函数，如果不属于，会接着判断type属于【app， apps， visTypes， fieldFormats， spyModes， chromeNavControls，bundle，aliases】会执行相应的操作。
+至此UiExports的consumePlugin执行完毕。
+
+
+
+*** exportConsumer函数
+该函数为闭包函数，接受一个参数type，返回一个函数，返回函数有两个参数(plugin, specs), type值为各个插件配置中 uiExports的key，plugin为该Plugin， specs为该plugin配置中的该type对应的value， 比如kibana-plugin，路径在：kibana/src/plugins/kibana,该plugin配置为如下：
+#+BEGIN_SRC js
+  uiExports: {
+      app: {
+          title: 'Kibana',
+          ... //其他配置
+      }
+  }
+#+END_SRC
+传入type为：app， 返回函数应该传入参数为kibana-plugin和{ title: 'Kibana', ...//其他配置}
+当type为不同类型时会产生不同的操作,当type为app时比较复杂一些，其余都比较简单。下面分别进行说明
+**** type为app或为apps
+返回函数执行UiAppCollection的new方法，即上文的this的[[ui-apps][apps]]的new方法，传入specs参数添加了id和urlBasePath信息，
+其中UiAppCollection的new方法会调用new UiApp的new方法生成一个[[ui-uiapp][UiApp]]类的实例返回，plugin将此实例添加进自己的apps变量中，代码如下：
+#+BEGIN_SRC js
+  let app = this.apps.new(_.defaults({}, spec, {
+      id: plugin.id,
+      urlBasePath: this.urlBasePath
+  }));
+  plugin.apps.add(app);
+#+END_SRC
+代码中的this为kibana.uiExport对象，plugin为传入的plugin。UiApp中就包含了该app的相关信息，比如url，main，title，description等信息。
+**** type 为 'visTypes','fieldFormats', 'spyModes','chromeNavControls'
+代码很简单：this.aliases[type] = _.union(this.aliases[type] || [], spec);不多做解释。
+*** 相关的类
+**** UiAppCollection
+<<ui-uiappcollection>>
+**** UiBundlerEnv
+<<ui-uibundlerenv>>
+**** UiApp
+<<ui-uiapp>>
+
+** bundles, kbnServer.bundles
+
+该类是一个UiBundleCollection实例，代码在kibana/src/ui/UiBundleCollection.js文件中，该类接受两个参数的构造函数，一个为[[ui-uibundlerenv][UiBundlerEnv]],另一个为filter。然后获取uiExports中的所有app， 根据app生成bundler类，添加入该kbnServer.bundles。代码如下：
+#+BEGIN_SRC js
+  this.add(new UiBundle({
+      id: app.id,
+      modules: app.getModules(),
+      template: appEntryTemplate,
+      env: this.env
+  }));
+#+END_SRC
+this.env即为构造函数传入的UiBundlerEnv
+** 用到的库
+*** babel
+Babel是一个广泛使用的转码器，可以将ES6代码转为ES5代码，从而在现有环境执行。kibana使用了ES6代码，使用babel进行转码，在代码kibana/src/cli/index.js,使用babel
+*** bluebird
+bluebird是一个第三方Promise规范实现库，它不仅完全兼容原生Promise对象，且比原生对象功能更强大。在kibana代码中有很多地方都使用了bluebird库
+*** Commander
+<<lab-commander>>
+commander.js，用来简化命令行的开发的库， kibana的程序入口也用到，并且添加了许多函数，代码主要在src/cli/Command.js中，提供篇使用实例的[[http://blog.fens.me/nodejs-commander/][文章]] , 使用可以参考。
+*** lodash
+lodash是一个具有一致接口、模块化、高性能等特性的 JavaScript 工具库。在kibana代码中几乎每个文件中第一行都是let _ = require('lodash'); 你可以查看lodash的[[http://lodashjs.com/][api地址]]。
+*** joi
+主要用来验证配置数据，在插件和kbnServer的配置中都用到了，一篇国内的介绍[[http://imweb.io/topic/572561798a0819f17b7d9d3e][文章 ]]，可以参考一下。
+*** hapi
+一个node http server框架，号称用户只需要进行配置就可以实现复杂的http服务。在kibana中hapi作为web服务器，也用到了proxy功能。将某些请求直接转发到后端的elasticsearch中
+*** jade
+[[http://jade-lang.com][jade]] 一个非常干净易用的html模板语言
+
+
+** 前端显示
+ 前端后续在继续分析

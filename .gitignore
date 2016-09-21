@@ -52,6 +52,7 @@ config/kibana.dev.yml
 *.swp
 *.swo
 *.out
+*~
 test/output
 trash
 

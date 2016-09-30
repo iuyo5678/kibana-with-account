@@ -114,8 +114,8 @@ Async.auto({
     var User = require('../server/account/models/user');
     var Admin = require('../server/account/models/admin');
     var AdminGroup = require('../server/account/models/admin-group');
-    var Account = require('../server/account/models/account');
     var UserGroup = require('../server/account/models/user-group');
+    var UserRequest = require('../server/account/models/user-request');
 
     Async.auto({
       connect: function (done) {
@@ -128,25 +128,27 @@ Async.auto({
           User.deleteMany.bind(User, {}),
           Admin.deleteMany.bind(Admin, {}),
           AdminGroup.deleteMany.bind(AdminGroup, {}),
-          Account.deleteMany.bind(Account, {}),
           UserGroup.deleteMany.bind(UserGroup, {})
         ], done);
       }],
-      adminGroup: ['clean', function (done) {
+      adminGroupDefault: ['clean', function (done) {
 
-        AdminGroup.create('Root', done);
+        AdminGroup.create('default', done);
+      }],
+      adminGroupRoot:['clean', function (done) {
+        AdminGroup.create('root', done);
       }],
       admin: ['clean', function (done) {
 
-        Admin.create('Root Admin', done);
-      }],
-      user: ['clean', function (done, dbResults) {
-
-        User.create('root', results.rootPassword, results.rootEmail, done);
+        Admin.create('Admin', done);
       }],
       userGroup:['clean', function (done) {
 
         UserGroup.create("default", done);
+      }],
+      user: ['clean', function (done, dbResults) {
+
+        User.create('root', results.rootPassword, results.rootEmail, done);
       }],
 
       adminMembership: ['admin', function (done, dbResults) {
@@ -155,22 +157,23 @@ Async.auto({
         var update = {
           $set: {
             groups: {
-              root: 'Root'
+              root: 'root'
             }
           }
         };
 
         Admin.findByIdAndUpdate(id, update, done);
       }],
-      linkUser: ['admin', 'user', function (done, dbResults) {
+      linkUser: ['admin', 'adminGroupRoot', 'user', function (done, dbResults) {
 
         var id = dbResults.user._id.toString();
         var update = {
           $set: {
             'roles.admin': {
-              id: dbResults.admin._id.toString(),
-              name: 'Root Admin'
-            }
+              id: dbResults.adminGroupRoot._id.toString(),
+              name: dbResults.adminGroupRoot.name.toString()
+            },
+            group: "default"
           }
         };
 

@@ -3,7 +3,7 @@ var React = require('react/addons');
 var ControlGroup = require('../../../../components/form/ControlGroup');
 var Button = require('../../../../components/form/Button');
 var Spinner = require('../../../../components/form/Spinner');
-var Actions = require('../../actions/Status');
+var Actions = require('../../actions/UserGroup');
 
 
 var LinkedState = React.addons.LinkedStateMixin;

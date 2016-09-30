@@ -18,7 +18,8 @@ var Component = React.createClass({
             this.setState({
                 hydrated: nextProps.data.hydrated,
                 username: nextProps.data.username,
-                email: nextProps.data.email
+                email: nextProps.data.email,
+                group: nextProps.data.group
             });
         }
     },
@@ -57,11 +58,11 @@ var Component = React.createClass({
         if (this.props.data.hydrated) {
             formElements = (
                 <fieldset>
-                    <legend>Identity</legend>
+                    <legend>用户信息</legend>
                     {alerts}
                     <TextControl
                         name="username"
-                        label="Username"
+                        label="用户名"
                         hasError={this.props.data.hasError.username}
                         valueLink={this.linkState('username')}
                         help={this.props.data.help.username}
@@ -75,13 +76,21 @@ var Component = React.createClass({
                         help={this.props.data.help.email}
                         disabled={this.props.data.loading}
                     />
+                  <TextControl
+                    name="group"
+                    label="当前用户组:"
+                    hasError={this.props.data.hasError.userGroup}
+                    valueLink={this.linkState('group')}
+                    help={this.props.data.help.userGroup}
+                    disabled="disabled"
+                  />
                     <ControlGroup hideLabel={true} hideHelp={true}>
                         <Button
                             type="submit"
                             inputClasses={{ 'btn-primary': true }}
                             disabled={this.props.data.loading}>
 
-                            Update identity
+                            更新用户标识
                             <Spinner
                                 space="left"
                                 show={this.props.data.loading}

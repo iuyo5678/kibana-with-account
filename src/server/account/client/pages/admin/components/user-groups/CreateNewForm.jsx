@@ -4,7 +4,7 @@ var ControlGroup = require('../../../../components/form/ControlGroup');
 var TextControl = require('../../../../components/form/TextControl');
 var Button = require('../../../../components/form/Button');
 var Spinner = require('../../../../components/form/Spinner');
-var Actions = require('../../actions/Status');
+var Actions = require('../../actions/UserGroup');
 
 
 var LinkedState = React.addons.LinkedStateMixin;
@@ -40,7 +40,7 @@ var Component = React.createClass({
         else {
             this.timeout = setTimeout(function () {
 
-                this.refs.pivot.refs.inputField.getDOMNode().focus();
+                this.refs.name.refs.inputField.getDOMNode().focus();
             }.bind(this), 100);
         }
     },
@@ -50,7 +50,6 @@ var Component = React.createClass({
         event.stopPropagation();
 
         Actions.createNew({
-            pivot: this.state.pivot,
             name: this.state.name
         }, this.context.router);
     },
@@ -75,16 +74,8 @@ var Component = React.createClass({
             formElements = <fieldset>
                 {alerts}
                 <TextControl
-                    name="pivot"
-                    ref="pivot"
-                    label="Pivot"
-                    hasError={this.props.data.hasError.pivot}
-                    valueLink={this.linkState('pivot')}
-                    help={this.props.data.help.pivot}
-                    disabled={this.props.data.loading}
-                />
-                <TextControl
                     name="name"
+                    ref="name"
                     label="Name"
                     hasError={this.props.data.hasError.name}
                     valueLink={this.linkState('name')}

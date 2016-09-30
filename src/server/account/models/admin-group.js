@@ -23,19 +23,19 @@ var AdminGroup = BaseModel.extend({
 AdminGroup._collection = 'adminGroups';
 
 
-
-
 AdminGroup.schema = Joi.object().keys({
     _id: Joi.string(),
     name: Joi.string().required(),
     permissions: Joi.object().description('{ permission: boolean, ... }')
 });
 
+AdminGroup.indexes = [
+  [{ 'name': 1 }]
+];
 
 AdminGroup.create = function (name, callback) {
 
     var document = {
-        _id: Slug(name).toLowerCase(),
         name: name
     };
 
@@ -49,5 +49,10 @@ AdminGroup.create = function (name, callback) {
     });
 };
 
+AdminGroup.findByUsername = function (name, callback) {
+
+  var query = { 'name': name.toLowerCase() };
+  this.findOne(query, callback);
+};
 
 module.exports = AdminGroup;

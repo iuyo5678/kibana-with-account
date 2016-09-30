@@ -45,11 +45,11 @@ var Component = React.createClass({
         return (
             <form onSubmit={this.handleSubmit}>
                 <fieldset>
-                    <legend>Password</legend>
+                    <legend>密码管理</legend>
                     {alerts}
                     <TextControl
                         name="password"
-                        label="New password"
+                        label="新密码"
                         type="password"
                         hasError={this.props.data.hasError.password}
                         valueLink={this.linkState('password')}
@@ -58,7 +58,7 @@ var Component = React.createClass({
                     />
                     <TextControl
                         name="passwordConfirm"
-                        label="Confirm new password"
+                        label="确认密码"
                         type="password"
                         hasError={this.props.data.hasError.passwordConfirm}
                         valueLink={this.linkState('passwordConfirm')}
@@ -71,7 +71,7 @@ var Component = React.createClass({
                             inputClasses={{ 'btn-primary': true }}
                             disabled={this.props.data.loading}>
 
-                            Set password
+                            重设密码
                             <Spinner
                                 space="left"
                                 show={this.props.data.loading}

@@ -54,7 +54,6 @@ var Component = React.createClass({
     onStoreChange: function () {
 
         this.setState({
-            details: AdminStore.getDetails(),
             user: AdminStore.getUser(),
             groups: AdminStore.getGroups(),
             permissions: AdminStore.getPermissions(),
@@ -84,7 +83,6 @@ var Component = React.createClass({
                 </h1>
                 <div className="row">
                     <div className="col-sm-8">
-                        <DetailsForm data={this.state.details} />
                         <UserForm
                             details={this.state.details}
                             data={this.state.user}

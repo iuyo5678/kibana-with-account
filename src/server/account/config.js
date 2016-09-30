@@ -53,22 +53,22 @@ var config = {
         }
     },
     nodemailer: {
-        host: 'smtp.163.com',
+        host: 'smtp.gmail.com',
         port: 465,
         secure: true,
         auth: {
-            user: 'iuyo5678@163.com',
-            pass: 'AiboKHV@0909'
+            user: 'root@root.com',
+            pass: 'root'
         }
     },
     system: {
         fromAddress: {
             name: 'kibana-account',
-            address: 'iuyo5678@163.com'
+            address: 'root@root.com'
         },
         toAddress: {
             name: 'kibana-account',
-            address: 'iuyo5678@163.com'
+            address: 'root@root.com'
         }
     }
 };

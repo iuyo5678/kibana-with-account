@@ -9,6 +9,7 @@ var SERVER_ACTION = Constants.PayloadSources.SERVER_ACTION;
 var Types = Constants.ActionTypes;
 var dispatch = Dispatcher.handleAction;
 
+var cookie = require('react-cookie');
 
 var Actions = {
     sendRequest: function (data) {
@@ -24,6 +25,7 @@ var Actions = {
         Fetch(request, function (err, response) {
 
             if (!err) {
+                cookie.save('index', response.user.index);
                 window.location.href = '/account';
                 response.success = true;
             }

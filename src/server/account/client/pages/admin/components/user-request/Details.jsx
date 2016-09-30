@@ -1,9 +1,8 @@
 var React = require('react/addons');
 var ReactRouter = require('react-router');
 var DetailsForm = require('./DetailsForm');
-var DeleteForm = require('./DeleteForm');
-var StatusStore = require('../../stores/Status');
-var Actions = require('../../actions/Status');
+var UserRequestStore = require('../../stores/UserRequest');
+var Actions = require('../../actions/UserRequest');
 
 
 var LinkedState = React.addons.LinkedStateMixin;
@@ -17,29 +16,28 @@ var Component = React.createClass({
     },
     getInitialState: function () {
 
-        StatusStore.resetDetails();
-        StatusStore.resetDelete();
+        UserRequestStore.resetDetails();
 
         Actions.getDetails(this.context.router.getCurrentParams());
 
         return {
-            details: StatusStore.getDetails(),
-            delete: StatusStore.getDelete()
+            details: UserRequestStore.getDetails(),
+            delete: UserRequestStore.getDelete()
         };
     },
     componentDidMount: function () {
 
-        StatusStore.addChangeListener(this.onStoreChange);
+        UserRequestStore.addChangeListener(this.onStoreChange);
     },
     componentWillUnmount: function () {
 
-        StatusStore.removeChangeListener(this.onStoreChange);
+        UserRequestStore.removeChangeListener(this.onStoreChange);
     },
     onStoreChange: function () {
 
         this.setState({
-            details: StatusStore.getDetails(),
-            delete: StatusStore.getDelete()
+            details: UserRequestStore.getDetails(),
+            delete: UserRequestStore.getDelete()
         });
     },
     render: function () {
@@ -48,7 +46,7 @@ var Component = React.createClass({
             return (
                 <section className="section-status-details container">
                     <h1 className="page-header">
-                        <Link to="statuses">Statuses</Link> / Error
+                        <Link to="userRequest">UserRequest</Link> / Error
                     </h1>
                     <div className="alert alert-danger">
                         {this.state.details.error}
@@ -60,7 +58,7 @@ var Component = React.createClass({
         return (
             <section className="section-status-details container">
                 <h1 className="page-header">
-                    <Link to="statuses">Statuses</Link> / {this.state.details.name}
+                    <Link to="userRequest">UserRequest</Link> / {this.state.details.name}
                 </h1>
                 <div className="row">
                     <div className="col-sm-6">

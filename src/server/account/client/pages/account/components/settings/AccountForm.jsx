@@ -62,7 +62,7 @@ var Component = React.createClass({
         if (this.props.data.hydrated) {
             formElements = (
                 <fieldset>
-                    <legend>Contact info</legend>
+                    <legend>联系信息</legend>
                     {alerts}
                     <TextControl
                         name="nameFirst"
@@ -94,7 +94,7 @@ var Component = React.createClass({
                             inputClasses={{ 'btn-primary': true }}
                             disabled={this.props.data.loading}>
 
-                            Update contact info
+                            更新用户信息
                             <Spinner
                                 space="left"
                                 show={this.props.data.loading}

@@ -1,6 +1,8 @@
 var createAgent = require('./create_agent');
 var mapUri = require('./map_uri');
+var preResponse = require('./pre_process_response')
 var { resolve } = require('url');
+
 module.exports = function createProxy(server, method, route, config) {
 
   var pre = '/elasticsearch';
@@ -14,7 +16,8 @@ module.exports = function createProxy(server, method, route, config) {
         mapUri: mapUri(server),
         passThrough: true,
         agent: createAgent(server),
-        xforward: true
+        xforward: true,
+        onResponse: preResponse(server)
       }
     },
   };

@@ -57,15 +57,6 @@ var Component = React.createClass({
         if (!this.state.success) {
             formElements = <fieldset>
                 <TextControl
-                    name="name"
-                    label="姓名"
-                    ref="nameControl"
-                    hasError={this.state.hasError.name}
-                    valueLink={this.linkState('name')}
-                    help={this.state.help.name}
-                    disabled={this.state.loading}
-                />
-                <TextControl
                     name="email"
                     label="Email"
                     hasError={this.state.hasError.email}

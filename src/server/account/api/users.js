@@ -1,6 +1,7 @@
 var Joi = require('joi');
 var Hoek = require('hoek');
 var AuthPlugin = require('../auth');
+var Async = require('async');
 
 
 exports.register = function (server, options, next) {
@@ -106,7 +107,7 @@ exports.register = function (server, options, next) {
 
             var User = request.server.plugins['hapi-mongo-models'].User;
             var id = request.auth.credentials.user._id.toString();
-            var fields = User.fieldsAdapter('username email roles');
+            var fields = User.fieldsAdapter('username email group roles');
 
             User.findById(id, fields, function (err, user) {
 
@@ -214,6 +215,145 @@ exports.register = function (server, options, next) {
         }
     });
 
+
+    server.route({
+    method: 'GET',
+    path: options.basePath + '/users/group',
+    config: {
+      auth: {
+        strategy: 'session',
+        scope: ['admin', 'account']
+      }
+    },
+    handler: function (request, reply) {
+
+      var UserGroup = request.server.plugins['hapi-mongo-models'].UserGroup;
+
+      var id = request.auth.credentials.user.group.toString();
+
+      UserGroup.findGroupById(id, function (err, group) {
+        if(err) {
+          return reply(err);
+        }
+        if(!group) {
+          return reply({ message: 'Document not found. That is strange.' }).code(404);
+        }
+        reply(group);
+      });
+    }
+  });
+
+  server.route({
+    method: 'PUT',
+    path: options.basePath + '/users/group',
+    config: {
+      auth: {
+        strategy: 'session',
+        scope: 'account'
+      },
+      validate: {
+        payload: {
+          opParameter: Joi.object().required(),
+          opType: Joi.string().required(),
+          userEmail: Joi.string().required()
+        }
+      },
+      pre: [
+        {
+          assign: "user",
+          method: function (request, reply) {
+            var User = request.server.plugins['hapi-mongo-models'].User;
+            var conditions = {
+              email : request.payload.userEmail
+            };
+            User.findOne(conditions, function (err, user) {
+              if(err) {
+                return reply(user)
+              }
+
+              if(!user) {
+                var response = {
+                  message: 'the User not found'
+                };
+
+                return reply(response).takeover().code(404);
+              }
+              reply(user)
+            })
+          }
+        },{
+          assign: 'operateCheck',
+          method: function (request, reply) {
+            var UserRequest = request.server.plugins['hapi-mongo-models'].UserRequest;
+            var user = {
+              id: request.pre.user._id.toString(),
+              name: request.pre.user.username.toString()
+            };
+            var conditions = {
+              user: user,
+              opType: request.payload.opType,
+              isClosed: false
+            };
+            UserRequest.findOne(conditions, function (err, userRequest) {
+              if(err) {
+                return reply(err);
+              }
+              if(userRequest) {
+                var response = {
+                  message: '你已经提交了相同的需求, 请处理后再提交!'
+                };
+
+                return reply(response).takeover().code(403);
+              }
+              reply(true);
+            });
+          }
+        },{
+          assign: 'groupCheck',
+          method: function (request, reply) {
+
+            var UserGroup = request.server.plugins['hapi-mongo-models'].UserGroup;
+            var conditions = {
+              name: request.payload.opParameter.newGroup
+            };
+
+            UserGroup.findOne(conditions, function (err, userGroup) {
+
+              if (err) {
+                return reply(err);
+              }
+
+              if (!userGroup) {
+                var response = {
+                  message: 'the userGroup not found'
+                };
+
+                return reply(response).takeover().code(404);
+              }
+
+              reply(userGroup);
+            });
+          }
+        }
+      ]
+    },
+    handler: function (request, reply) {
+
+      var UserRequest = request.server.plugins['hapi-mongo-models'].UserRequest;
+      var user = {
+        id: request.pre.user._id.toString(),
+        name: request.pre.user.username.toString()
+      };
+
+      UserRequest.create(user, request.payload.opType, request.payload.opParameter, function (err, userRequest) {
+        if(err) {
+          return reply(err);
+        }
+
+        reply(userRequest)
+      });
+    }
+  });
 
     server.route({
         method: 'PUT',

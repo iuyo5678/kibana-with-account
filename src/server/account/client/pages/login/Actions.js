@@ -4,107 +4,110 @@ var Constants = require('./Constants');
 var Fetch = require('../../helpers/jsonFetch');
 var RedirectActions = require('../../actions/Redirect');
 
-
 var VIEW_ACTION = Constants.PayloadSources.VIEW_ACTION;
 var SERVER_ACTION = Constants.PayloadSources.SERVER_ACTION;
 var Types = Constants.ActionTypes;
 var dispatch = Dispatcher.handleAction;
 
+var cookie = require('react-cookie');
 
 var Actions = {
-    forgot: function (data) {
+  forgot: function (data) {
 
-        dispatch(VIEW_ACTION, Types.FORGOT, data);
+    dispatch(VIEW_ACTION, Types.FORGOT, data);
 
-        var request = {
-            method: 'POST',
-            url: '/api/login/forgot',
-            data: data
-        };
+    var request = {
+      method: 'POST',
+      url: '/api/login/forgot',
+      data: data
+    };
 
-        Fetch(request, function (err, response) {
+    Fetch(request, function (err, response) {
 
-            if (!err) {
-                response.success = true;
-            }
+      if (!err) {
+        response.success = true;
+      }
 
-            dispatch(SERVER_ACTION, Types.FORGOT_RESPONSE, response);
-        });
-    },
-    login: function (data) {
+      dispatch(SERVER_ACTION, Types.FORGOT_RESPONSE, response);
+    });
+  },
+  login: function (data) {
 
-        dispatch(VIEW_ACTION, Types.LOGIN, data);
+    dispatch(VIEW_ACTION, Types.LOGIN, data);
 
-        var request = {
-            method: 'POST',
-            url: '/api/login',
-            data: data
-        };
+    var request = {
+      method: 'POST',
+      url: '/api/login',
+      data: data
+    };
 
-        Fetch(request, function (err, response) {
+    Fetch(request, function (err, response) {
 
-            if (!err) {
-                var returnUrl = window.localStorage.getItem('returnUrl');
+      if (!err) {
+        var returnUrl = window.localStorage.getItem('returnUrl');
 
-                if (returnUrl) {
-                    RedirectActions.clearReturnUrl();
-                    window.location.href = returnUrl;
-                }
-                else if (response.user.roles.admin) {
-                    window.location.href = '/admin';
-                }
-                else {
-                    window.location.href = '/';
-                }
+        if (returnUrl) {
+          RedirectActions.clearReturnUrl();
+          window.location.href = returnUrl;
+        }
+        else if (response.user.roles.admin) {
 
-                response.success = true;
-            }
+          window.location.href = '/admin';
+        }
+        else {
+          cookie.save('index', response.user.index);
+          window.location.href = '/';
+        }
 
-            dispatch(SERVER_ACTION, Types.LOGIN_RESPONSE, response);
-        });
-    },
-    logout: function (data) {
+        response.success = true;
+      }
 
-        dispatch(VIEW_ACTION, Types.LOGOUT, data);
+      dispatch(SERVER_ACTION, Types.LOGIN_RESPONSE, response);
+    });
+  },
+  logout: function (data) {
 
-        var request = {
-            method: 'DELETE',
-            url: '/api/logout',
-            data: data,
-            useAuth: true
-        };
+    dispatch(VIEW_ACTION, Types.LOGOUT, data);
 
-        Fetch(request, function (err, response) {
+    var request = {
+      method: 'DELETE',
+      url: '/api/logout',
+      data: data,
+      useAuth: true
+    };
 
-            if (!err) {
-                response.success = true;
-            }
-            else {
-                response.error = err.message;
-            }
+    Fetch(request, function (err, response) {
 
-            dispatch(SERVER_ACTION, Types.LOGOUT_RESPONSE, response);
-        });
-    },
-    reset: function (data) {
+      if (!err) {
+        cookie.remove('index');
+        response.success = true;
+      }
+      else {
+        response.error = err.message;
+      }
 
-        dispatch(VIEW_ACTION, Types.RESET, data);
+      dispatch(SERVER_ACTION, Types.LOGOUT_RESPONSE, response);
+    });
+  },
+  reset: function (data) {
 
-        var request = {
-            method: 'POST',
-            url: '/api/login/reset',
-            data: data
-        };
+    dispatch(VIEW_ACTION, Types.RESET, data);
 
-        Fetch(request, function (err, response) {
+    var request = {
+      method: 'POST',
+      url: '/api/login/reset',
+      data: data
+    };
 
-            if (!err) {
-                response.success = true;
-            }
+    Fetch(request, function (err, response) {
 
-            dispatch(SERVER_ACTION, Types.RESET_RESPONSE, response);
-        });
-    }
+      if (!err) {
+        response.success = true;
+      }
+
+      dispatch(SERVER_ACTION, Types.RESET_RESPONSE, response);
+    });
+  }
 };
 
 

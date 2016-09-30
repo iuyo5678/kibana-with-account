@@ -1,10 +1,9 @@
 /* global window */
 var React = require('react/addons');
 var Paging = require('../../../../components/Paging');
-var Actions = require('../../actions/Status');
-var StatusStore = require('../../stores/Status');
+var Actions = require('../../actions/UserRequest');
+var UserRequestStore = require('../../stores/UserRequest');
 var FilterForm = require('./FilterForm');
-var CreateNewForm = require('./CreateNewForm');
 var Results = require('./Results');
 
 
@@ -14,14 +13,12 @@ var Component = React.createClass({
     },
     getInitialState: function () {
 
-        StatusStore.resetResults();
-        StatusStore.resetCreateNew();
+        UserRequestStore.resetResults();
 
         Actions.getResults(this.context.router.getCurrentQuery());
 
         return {
-            results: StatusStore.getResults(),
-            createNew: StatusStore.getCreateNew()
+            results: UserRequestStore.getResults(),
         };
     },
     componentWillReceiveProps: function (nextProps) {
@@ -30,17 +27,16 @@ var Component = React.createClass({
     },
     componentDidMount: function () {
 
-        StatusStore.addChangeListener(this.onStoreChange);
+        UserRequestStore.addChangeListener(this.onStoreChange);
     },
     componentWillUnmount: function () {
 
-        StatusStore.removeChangeListener(this.onStoreChange);
+        UserRequestStore.removeChangeListener(this.onStoreChange);
     },
     onStoreChange: function () {
 
         this.setState({
-            results: StatusStore.getResults(),
-            createNew: StatusStore.getCreateNew()
+            results: UserRequestStore.getResults()
         });
     },
     onFiltersChange: function (event) {
@@ -50,30 +46,20 @@ var Component = React.createClass({
             event.stopPropagation();
         }
 
-        this.context.router.transitionTo('statuses', {}, this.refs.filters.state);
+        this.context.router.transitionTo('userRequest', {}, this.refs.filters.state);
         window.scrollTo(0, 0);
     },
     onPageChange: function (page) {
 
         this.refs.filters.changePage(page);
     },
-    onNewClick: function () {
 
-        Actions.showCreateNew();
-    },
     render: function () {
 
         return (
             <section className="section-statuses container">
                 <div className="page-header">
-                    <button
-                        ref="createNew"
-                        className="btn btn-default pull-right"
-                        onClick={this.onNewClick}>
-
-                        Create new
-                    </button>
-                    <h1>Statuses</h1>
+                    <h1>UserRequest</h1>
                 </div>
                 <FilterForm
                     ref="filters"
@@ -89,7 +75,6 @@ var Component = React.createClass({
                     loading={this.state.results.loading}
                     onChange={this.onPageChange}
                 />
-                <CreateNewForm data={this.state.createNew} />
             </section>
         );
     }

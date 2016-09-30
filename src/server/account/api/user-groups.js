@@ -10,33 +10,27 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
-        path: options.basePath + '/statuses',
+        path: options.basePath + '/user-groups',
         config: {
             auth: {
                 strategy: 'session',
-                scope: 'admin'
+                scope: ['admin', 'account']
             },
             validate: {
                 query: {
                     name: Joi.string().allow(''),
-                    pivot: Joi.string().allow(''),
                     fields: Joi.string(),
                     sort: Joi.string().default('_id'),
                     limit: Joi.number().default(20),
                     page: Joi.number().default(1)
                 }
             },
-            pre: [
-                AuthPlugin.preware.ensureAdminGroup('root')
-            ]
+
         },
         handler: function (request, reply) {
 
-            var Status = request.server.plugins['hapi-mongo-models'].Status;
+            var UserGroup = request.server.plugins['hapi-mongo-models'].UserGroup;
             var query = {};
-            if (request.query.pivot) {
-                query.pivot = new RegExp('^.*?' + request.query.pivot + '.*$', 'i');
-            }
             if (request.query.name) {
                 query.name = new RegExp('^.*?' + request.query.name + '.*$', 'i');
             }
@@ -45,7 +39,7 @@ exports.register = function (server, options, next) {
             var limit = request.query.limit;
             var page = request.query.page;
 
-            Status.pagedFind(query, fields, sort, limit, page, function (err, results) {
+            UserGroup.pagedFind(query, fields, sort, limit, page, function (err, results) {
 
                 if (err) {
                     return reply(err);
@@ -56,10 +50,9 @@ exports.register = function (server, options, next) {
         }
     });
 
-
     server.route({
         method: 'GET',
-        path: options.basePath + '/statuses/{id}',
+        path: options.basePath + '/user-groups/{id}',
         config: {
             auth: {
                 strategy: 'session',
@@ -71,19 +64,19 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Status = request.server.plugins['hapi-mongo-models'].Status;
+            var UserGroup = request.server.plugins['hapi-mongo-models'].UserGroup;
 
-            Status.findById(request.params.id, function (err, status) {
+            UserGroup.findGroupById(request.params.id, function (err, userGroup) {
 
                 if (err) {
                     return reply(err);
                 }
 
-                if (!status) {
+                if (!userGroup) {
                     return reply({ message: 'Document not found.' }).code(404);
                 }
 
-                reply(status);
+                reply(userGroup);
             });
         }
     });
@@ -91,7 +84,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'POST',
-        path: options.basePath + '/statuses',
+        path: options.basePath + '/user-groups',
         config: {
             auth: {
                 strategy: 'session',
@@ -99,7 +92,6 @@ exports.register = function (server, options, next) {
             },
             validate: {
                 payload: {
-                    pivot: Joi.string().required(),
                     name: Joi.string().required()
                 }
             },
@@ -109,60 +101,16 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Status = request.server.plugins['hapi-mongo-models'].Status;
-            var pivot = request.payload.pivot;
+            var UserGroup = request.server.plugins['hapi-mongo-models'].UserGroup;
             var name = request.payload.name;
 
-            Status.create(pivot, name, function (err, status) {
+            UserGroup.create(name, function (err, userGroup) {
 
                 if (err) {
                     return reply(err);
                 }
 
-                reply(status);
-            });
-        }
-    });
-
-
-    server.route({
-        method: 'PUT',
-        path: options.basePath + '/statuses/{id}',
-        config: {
-            auth: {
-                strategy: 'session',
-                scope: 'admin'
-            },
-            validate: {
-                payload: {
-                    name: Joi.string().required()
-                }
-            },
-            pre: [
-                AuthPlugin.preware.ensureAdminGroup('root')
-            ]
-        },
-        handler: function (request, reply) {
-
-            var Status = request.server.plugins['hapi-mongo-models'].Status;
-            var id = request.params.id;
-            var update = {
-                $set: {
-                    name: request.payload.name
-                }
-            };
-
-            Status.findByIdAndUpdate(id, update, function (err, status) {
-
-                if (err) {
-                    return reply(err);
-                }
-
-                if (!status) {
-                    return reply({ message: 'Document not found.' }).code(404);
-                }
-
-                reply(status);
+                reply(userGroup);
             });
         }
     });
@@ -170,7 +118,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'DELETE',
-        path: options.basePath + '/statuses/{id}',
+        path: options.basePath + '/user-groups/{id}',
         config: {
             auth: {
                 strategy: 'session',
@@ -182,15 +130,15 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Status = request.server.plugins['hapi-mongo-models'].Status;
+            var UserGroup = request.server.plugins['hapi-mongo-models'].UserGroup;
 
-            Status.findByIdAndDelete(request.params.id, function (err, status) {
+            UserGroup.findByIdAndDelete(request.params.id, function (err, userGroup) {
 
                 if (err) {
                     return reply(err);
                 }
 
-                if (!status) {
+                if (!userGroup) {
                     return reply({ message: 'Document not found.' }).code(404);
                 }
 
@@ -205,5 +153,5 @@ exports.register = function (server, options, next) {
 
 
 exports.register.attributes = {
-    name: 'statuses'
+    name: 'user-groups'
 };

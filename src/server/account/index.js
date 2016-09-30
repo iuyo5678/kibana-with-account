@@ -26,7 +26,9 @@ module.exports = (kbnServer, server, config) => {
         AuthAttempt: resolve(__dirname, './models/auth-attempt'),
         Session: resolve(__dirname, './models/session'),
         Status: resolve(__dirname, './models/status'),
-        User: resolve(__dirname, './models/user')
+        UserGroup: resolve(__dirname, './models/user-group'),
+        User: resolve(__dirname, './models/user'),
+        UserRequest: resolve(__dirname, './models/user-request')
       },
       autoIndex: true
     },
@@ -34,6 +36,7 @@ module.exports = (kbnServer, server, config) => {
     './mailer': {},
     './api/accounts': { basePath: '/api' },
     './api/admin-groups': { basePath: '/api' },
+    './api/user-groups': { basePath: '/api' },
     './api/admins': { basePath: '/api' },
     './api/auth-attempts': { basePath: '/api' },
     './api/index': { basePath: '/api' },
@@ -41,7 +44,7 @@ module.exports = (kbnServer, server, config) => {
     './api/logout': { basePath: '/api' },
     './api/sessions': { basePath: '/api' },
     './api/signup': { basePath: '/api' },
-    './api/statuses': { basePath: '/api' },
+    './api/user-request': { basePath: '/api' },
     './api/users': { basePath: '/api' },
     './web/about': {},
     './web/account': {},
@@ -51,6 +54,7 @@ module.exports = (kbnServer, server, config) => {
     './web/public': {},
     './web/signup': {}
   };
+
   let pluginNames = _.keys(serverPlugins);
   for (let name of pluginNames) {
     server.register({

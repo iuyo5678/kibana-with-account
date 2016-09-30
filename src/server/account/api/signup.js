@@ -24,7 +24,6 @@ exports.register = function (server, options, next) {
             },
             validate: {
                 payload: {
-                    name: Joi.string().required(),
                     email: Joi.string().email().lowercase().required(),
                     username: Joi.string().token().lowercase().required(),
                     password: Joi.string().required()
@@ -86,8 +85,9 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            var Account = request.server.plugins['hapi-mongo-models'].Account;
             var User = request.server.plugins['hapi-mongo-models'].User;
+            var UserGroup = request.server.plugins['hapi-mongo-models'].UserGroup;
+            var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
             var Session = request.server.plugins['hapi-mongo-models'].Session;
             var mailer = request.server.plugins.mailer;
 
@@ -100,43 +100,28 @@ exports.register = function (server, options, next) {
 
                     User.create(username, password, email, done);
                 },
-                account: ['user', function (done, results) {
-
-                    var name = request.payload.name;
-
-                    Account.create(name, done);
+                adminGroup: ['user', function (done, results) {
+                    AdminGroup.findByUsername('default', done);
                 }],
-                linkUser: ['account', function (done, results) {
 
-                    var id = results.account._id.toString();
-                    var update = {
-                        $set: {
-                            user: {
-                                id: results.user._id.toString(),
-                                name: results.user.username
-                            }
-                        }
-                    };
-
-                    Account.findByIdAndUpdate(id, update, done);
-                }],
-                linkAccount: ['account', function (done, results) {
+                linkAccount: ['adminGroup', function (done, results) {
 
                     var id = results.user._id.toString();
                     var update = {
                         $set: {
                             roles: {
                                 account: {
-                                    id: results.account._id.toString(),
-                                    name: results.account.name.first + ' ' + results.account.name.last
+                                    id: results.adminGroup._id.toString(),
+                                    name: results.adminGroup.name
                                 }
-                            }
+                            },
+                            group: 'default'
                         }
                     };
 
                     User.findByIdAndUpdate(id, update, done);
                 }],
-                welcome: ['linkUser', 'linkAccount', function (done, results) {
+                welcome: ['linkAccount', function (done, results) {
 
                     var emailOptions = {
                         subject: 'Your ' + Config.get('/projectName') + ' account',
@@ -156,9 +141,12 @@ exports.register = function (server, options, next) {
 
                     done();
                 }],
-                session: ['linkUser', 'linkAccount', function (done, results) {
+                session: ['linkAccount', function (done, results) {
 
                     Session.create(results.user._id.toString(), done);
+                }],
+                group: ['linkAccount', function (done, results) {
+                    UserGroup.findGroupById(results.user.group, done);
                 }]
             }, function (err, results) {
 
@@ -167,6 +155,7 @@ exports.register = function (server, options, next) {
                 }
 
                 var user = results.linkAccount;
+                var group = results.group;
                 var credentials = user.username + ':' + results.session.key;
                 var authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
                 var result = {
@@ -174,7 +163,8 @@ exports.register = function (server, options, next) {
                         _id: user._id,
                         username: user.username,
                         email: user.email,
-                        roles: user.roles
+                        roles: user.roles,
+                        index: group.index
                     },
                     session: results.session,
                     authHeader: authHeader

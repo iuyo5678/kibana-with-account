@@ -1,9 +1,6 @@
 var React = require('react/addons');
-var ControlGroup = require('../../../../components/form/ControlGroup');
 var TextControl = require('../../../../components/form/TextControl');
-var Button = require('../../../../components/form/Button');
-var Spinner = require('../../../../components/form/Spinner');
-var Actions = require('../../actions/Status');
+var Actions = require('../../actions/AdminGroup');
 
 
 var Component = React.createClass({
@@ -17,7 +14,6 @@ var Component = React.createClass({
         if (!this.state.hydrated) {
             this.setState({
                 hydrated: nextProps.data.hydrated,
-                pivot: nextProps.data.pivot,
                 name: nextProps.data.name
             });
         }
@@ -59,14 +55,6 @@ var Component = React.createClass({
                 <legend>Details</legend>
                 {alerts}
                 <TextControl
-                    name="pivot"
-                    label="Pivot"
-                    hasError={this.props.data.hasError.pivot}
-                    valueLink={this.linkState('pivot')}
-                    help={this.props.data.help.pivot}
-                    disabled={true}
-                />
-                <TextControl
                     name="name"
                     label="Name"
                     hasError={this.props.data.hasError.name}
@@ -74,16 +62,6 @@ var Component = React.createClass({
                     help={this.props.data.help.name}
                     disabled={this.props.data.loading}
                 />
-                <ControlGroup hideLabel={true} hideHelp={true}>
-                    <Button
-                        type="submit"
-                        inputClasses={{ 'btn-primary': true }}
-                        disabled={this.props.data.loading}>
-
-                        Save changes
-                        <Spinner space="left" show={this.props.data.loading} />
-                    </Button>
-                </ControlGroup>
             </fieldset>;
         }
 

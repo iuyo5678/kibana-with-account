@@ -8,9 +8,11 @@ exports.register = function (server, options, next) {
 
     server.auth.strategy('session', 'cookie', {
         password: '~k3yb04rdK4tz!',
-        cookie: 'sid-aqua',
+        cookie: 'sid-kibana',
         isSecure: false,
         redirectTo: '/login',
+        keepAlive: true,
+        ttl: 24 * 60 * 60 * 1000,
         validateFunc: function (request, data, callback) {
 
             Async.auto({
@@ -78,8 +80,10 @@ exports.preware.ensureAdminGroup = function (groups) {
             }
 
             var groupFound = groups.some(function (group) {
+                if (request.auth.credentials.roles.admin) {
+                   return request.auth.credentials.roles.admin.name == group;
+                }
 
-                return request.auth.credentials.roles.admin.isMemberOf(group);
             });
 
             if (!groupFound) {

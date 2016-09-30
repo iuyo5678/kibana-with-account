@@ -54,7 +54,7 @@ module.exports = async (kbnServer, server, config) => {
         if (!app) return reply(Boom.notFound('Unknown app ' + id));
 
         if (kbnServer.status.isGreen()) {
-          return reply.renderApp(app);
+          return reply.renderApp(app, req.auth.artifacts.user.index);
         } else {
           // 在这里如果服务不正常，就跳转到kibana状态页面
           return reply.renderStatusPage();
@@ -64,15 +64,14 @@ module.exports = async (kbnServer, server, config) => {
   });
 
   const defaultInjectedVars = {};
-  if (config.has('kibana')) {
-    defaultInjectedVars.kbnIndex = config.get('kibana.index');
-  }
+
   if (config.has('elasticsearch')) {
     defaultInjectedVars.esShardTimeout = config.get('elasticsearch.shardTimeout');
     defaultInjectedVars.esApiVersion = config.get('elasticsearch.apiVersion');
   }
 
-  server.decorate('reply', 'renderApp', function (app) {
+  server.decorate('reply', 'renderApp', function (app, indexName) {
+    defaultInjectedVars.kbnIndex = indexName;
     //所有的页面绘制都调用此函数进行绘制
     const payload = {
       app: app,

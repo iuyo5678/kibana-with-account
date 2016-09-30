@@ -1,7 +1,7 @@
 var Dispatcher = require('flux-dispatcher');
 var FluxStore = require('flux-store');
 var CloneDeep = require('lodash/lang/cloneDeep');
-var Constants = require('../constants/Status');
+var Constants = require('../constants/UserRequest');
 var ParseValidation = require('../../../helpers/parseValidation');
 
 
@@ -21,16 +21,6 @@ var Store = FluxStore.extend({
             pages: {},
             items: {}
         },
-        createNew: {
-            show: false,
-            loading: false,
-            error: undefined,
-            hasError: {},
-            help: {},
-            _id: undefined,
-            pivot: undefined,
-            name: undefined
-        },
         details: {
             hydrated: false,
             fetchFailure: false,
@@ -42,10 +32,6 @@ var Store = FluxStore.extend({
             _id: undefined,
             pivot: undefined,
             name: undefined
-        },
-        delete: {
-            loading: false,
-            error: undefined
         }
     },
     getState: function () {
@@ -56,43 +42,26 @@ var Store = FluxStore.extend({
 
         return this.state.results;
     },
-    getCreateNew: function () {
-
-        return this.state.createNew;
-    },
     getDetails: function () {
 
         return this.state.details;
-    },
-    getDelete: function () {
-
-        return this.state.delete;
     },
     reset: function () {
 
         this.state = {
             results: CloneDeep(this.defaultState.results),
-            createNew: CloneDeep(this.defaultState.createNew),
-            details: CloneDeep(this.defaultState.details),
-            delete: CloneDeep(this.defaultState.delete)
+            details: CloneDeep(this.defaultState.details)
         };
     },
     resetResults: function () {
 
         this.state.results = CloneDeep(this.defaultState.results);
     },
-    resetCreateNew: function () {
-
-        this.state.createNew = CloneDeep(this.defaultState.createNew);
-    },
     resetDetails: function () {
 
         this.state.details = CloneDeep(this.defaultState.details);
     },
-    resetDelete: function () {
 
-        this.state.delete = CloneDeep(this.defaultState.delete);
-    },
     resetValidationErrors: function (pivot) {
 
         this.state[pivot].error = undefined;
@@ -125,34 +94,6 @@ var Store = FluxStore.extend({
             this.state.results.data = action.data.data;
             this.state.results.pages = action.data.pages;
             this.state.results.items = action.data.items;
-            this.emitChange();
-        }
-
-        if (ActionTypes.SHOW_CREATE_NEW === action.type) {
-            this.resetCreateNew();
-            this.state.createNew.show = true;
-            this.emitChange();
-        }
-
-        if (ActionTypes.HIDE_CREATE_NEW === action.type) {
-            this.state.createNew.show = false;
-            this.emitChange();
-        }
-
-        if (ActionTypes.CREATE_NEW === action.type) {
-            this.state.createNew.loading = true;
-            this.resetValidationErrors('createNew');
-            this.emitChange();
-        }
-
-        if (ActionTypes.CREATE_NEW_RESPONSE === action.type) {
-            this.state.createNew.loading = false;
-            this.handleValidationErrors('createNew', action.data);
-
-            if (action.data.hasOwnProperty('_id')) {
-                this.resetCreateNew();
-            }
-
             this.emitChange();
         }
 
@@ -200,28 +141,6 @@ var Store = FluxStore.extend({
             this.emitChange();
         }
 
-        if (ActionTypes.DELETE === action.type) {
-            this.state.delete.loading = true;
-            this.emitChange();
-        }
-
-        if (ActionTypes.DELETE_RESPONSE === action.type) {
-            this.state.delete.loading = false;
-            this.handleValidationErrors('delete', action.data);
-
-            if (action.data.success) {
-                this.resetValidationErrors('delete');
-            }
-            else {
-                setTimeout(function () {
-
-                    this.state.delete.error = undefined;
-                    this.emitChange();
-                }.bind(this), 2500);
-            }
-
-            this.emitChange();
-        }
     }
 });
 

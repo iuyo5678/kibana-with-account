@@ -52,7 +52,7 @@ module.exports = function (kibana) {
       createProxy(
         server,
         ['PUT', 'POST', 'DELETE'],
-        '/' + config.get('kibana.index') + '/{paths*}',
+        '/.{index}/{paths*}',
         {
           pre: [ noBulkCheck ]
         }

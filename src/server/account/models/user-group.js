@@ -1,4 +1,5 @@
 var Joi = require('joi');
+var Async = require('async');
 var ObjectAssign = require('object-assign');
 var BaseModel = require('hapi-mongo-models').BaseModel;
 var Slug = require('slug');
@@ -20,21 +21,25 @@ var UserGroup = BaseModel.extend({
 });
 
 
-UserGroup._collection = 'adminGroups';
-
+UserGroup._collection = 'userGroups';
+UserGroup._idClass = String;
 
 UserGroup.schema = Joi.object().keys({
     _id: Joi.string(),
     name: Joi.string().required(),
-    permissions: Joi.object().description('{ permission: boolean, ... }')
+    index: Joi.string().required()
 });
 
+UserGroup.indexes = [
+  [{ name: 1 }, { unique: true }]
+];
 
 UserGroup.create = function (name, callback) {
-
+    var indexSuffix = Math.random().toString(36).substr(2);
     var document = {
         _id: Slug(name).toLowerCase(),
-        name: name
+        name: name,
+        index: ".".concat((name).toLowerCase(), indexSuffix)
     };
 
     this.insertOne(document, function (err, docs) {
@@ -47,5 +52,26 @@ UserGroup.create = function (name, callback) {
     });
 };
 
+UserGroup.findGroupById = function (name, callback) {
+  var self = this;
+  Async.auto({
+    group: function (done) {
+      var query = {
+        _id: name
+      };
+
+      self.findOne(query, done);
+    }
+  }, function (err, results) {
+
+    if (err) {
+      return callback(err);
+    }
+
+    return callback(null, results.group);
+
+  });
+
+};
 
 module.exports = UserGroup;

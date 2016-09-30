@@ -42,7 +42,6 @@ var Store = FluxStore.extend({
 
         this.state.loading = false;
         this.state.success = data.success;
-
         if (this.state.success) {
             setTimeout(function () {
 
@@ -59,35 +58,39 @@ var Store = FluxStore.extend({
 
         var action = payload.action;
 
-        if (ActionTypes.GET_USER_SETTINGS === action.type) {
+        if(ActionTypes.GET_ALL_GROUP_SETTINGS === action.type) {
             this.setLoadingState();
             this.state.hydrated = false;
             this.emitChange();
         }
 
-        if (ActionTypes.GET_USER_SETTINGS_RESPONSE === action.type) {
-            this.handleResponseErrors(action.data);
+        if(ActionTypes.GET_ALL_GROUP_SETTINGS_RESPONSE === action.type) {
+            var validation = ParseValidation(action.data.validation, action.data.message);
+
+            this.state.loading = false;
+            this.state.hasError = validation.hasError;
+            this.state.help = validation.help;
+            this.state.error = validation.error;
+
             this.state.hydrated = true;
-            this.state.username = action.data.username;
-            this.state.email = action.data.email;
-            this.state.group = action.data.group;
+            this.state.userGroup = action.data.data;
             this.emitChange();
         }
 
-        if (ActionTypes.SAVE_USER_SETTINGS === action.type) {
+        if (ActionTypes.SAVE_USER_GROUP_SETTINGS === action.type) {
             this.setLoadingState();
             this.emitChange();
         }
 
-        if (ActionTypes.SAVE_USER_SETTINGS_RESPONSE === action.type) {
+        if (ActionTypes.SAVE_USER_GROUP_SETTINGS_RESPONSE === action.type) {
             this.handleResponseErrors(action.data);
-
-            if (this.state.success) {
-                this.state.username = action.data.username;
-                this.state.email = action.data.user.email;
-                this.state.group = action.data.group;
+            var self = this;
+            if (this.state.error) {
+                setTimeout(function () {
+                    self.state.error = undefined;
+                    self.emitChange();
+                }, 1000);
             }
-
             this.emitChange();
         }
     }

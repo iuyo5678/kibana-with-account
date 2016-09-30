@@ -8,7 +8,7 @@ var Component = React.createClass({
             <div className="footer">
                 <div className="container">
                     <span className="copyright pull-right">
-                        &#169; 2014 Acme, Inc.
+                        &#169; 2016 zgh, Inc.
                     </span>
                     <ul className="links">
                         <li><a href="/">Home</a></li>

@@ -62,21 +62,21 @@ var Component = React.createClass({
                     </div>
                     <div className={navBarCollapse}>
                         <ul className="nav navbar-nav">
-                            <li className={this.isNavActive(['accounts', 'accountDetails'])}>
-                                <Link to="accounts">Accounts</Link>
-                            </li>
                             <li className={this.isNavActive(['admins', 'adminDetails'])}>
                                 <Link to="admins">Admins</Link>
                             </li>
                             <li className={this.isNavActive(['adminGroups', 'adminGroupDetails'])}>
                                 <Link to="adminGroups">Admin Groups</Link>
                             </li>
-                            <li className={this.isNavActive(['statuses', 'statusDetails'])}>
-                                <Link to="statuses">Statuses</Link>
+                            <li className={this.isNavActive(['userRequest', 'userRequestDetails'])}>
+                                <Link to="userRequest">UserRequest</Link>
                             </li>
                             <li className={this.isNavActive(['users', 'userDetails'])}>
                                 <Link to="users">Users</Link>
                             </li>
+                            <li className={this.isNavActive(['userGroups', 'userGroupDetails'])}>
+                                <Link to="userGroups">UserGroup</Link>
+                             </li>
                         </ul>
                         <ul className="nav navbar-nav navbar-right">
                             <li>

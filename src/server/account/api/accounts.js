@@ -15,7 +15,7 @@ exports.register = function (server, options, next) {
         config: {
             auth: {
                 strategy: 'session',
-                scope: 'account'
+                scope: 'admin'
             },
             validate: {
                 query: {

@@ -3,7 +3,7 @@ var Async = require('async');
 var Bcrypt = require('bcrypt');
 var ObjectAssign = require('object-assign');
 var BaseModel = require('hapi-mongo-models').BaseModel;
-var Account = require('./account');
+var AdminGroup = require('./admin-group')
 var Admin = require('./admin');
 
 
@@ -42,14 +42,14 @@ var User = BaseModel.extend({
         if (this.roles.account) {
             tasks.account = function (done) {
 
-                Account.findById(self.roles.account.id, done);
+                AdminGroup.findById(self.roles.account.id, done);
             };
         }
 
         if (this.roles.admin) {
             tasks.admin = function (done) {
 
-                Admin.findById(self.roles.admin.id, done);
+                AdminGroup.findById(self.roles.admin.id, done);
             };
         }
 
@@ -86,6 +86,7 @@ User.schema = Joi.object().keys({
             name: Joi.string().required()
         })
     }),
+    group: Joi.string().required(),
     resetPassword: Joi.object().keys({
         token: Joi.string().required(),
         expires: Joi.date().required()
@@ -137,6 +138,7 @@ User.create = function (username, password, email, callback) {
                 username: username.toLowerCase(),
                 email: email.toLowerCase(),
                 password: results.passwordHash.hash,
+                group: "default",
                 timeCreated: new Date()
             };
 

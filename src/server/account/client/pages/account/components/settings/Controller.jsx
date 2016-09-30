@@ -1,64 +1,68 @@
 var React = require('react/addons');
 var Actions = require('../../Actions');
-var AccountStore = require('../../stores/Account');
 var PasswordStore = require('../../stores/Password');
 var UserStore = require('../../stores/User');
-var AccountForm = require('./AccountForm');
+var UserGroupStore = require('../../stores/UserGroup');
 var UserForm = require('./UserForm');
+var UserGroupForm = require('./UserGroupForm');
 var PasswordForm = require('./PasswordForm');
 
 
 var Component = React.createClass({
-    getInitialState: function () {
+  getInitialState: function () {
 
-        AccountStore.reset();
-        PasswordStore.reset();
-        UserStore.reset();
+    PasswordStore.reset();
+    UserStore.reset();
+    UserGroupStore.reset();
 
-        Actions.getAccountSettings();
-        Actions.getUserSettings();
 
-        return this.getStateFromStores();
-    },
-    getStateFromStores: function () {
+    Actions.getUserSettings();
+    Actions.getAllUserGroupSettings();
 
-        return {
-            account: AccountStore.getState(),
-            user: UserStore.getState(),
-            password: PasswordStore.getState()
-        };
-    },
-    componentDidMount: function () {
+    return this.getStateFromStores();
+  },
+  getStateFromStores: function () {
 
-        AccountStore.addChangeListener(this.onStoreChange);
-        UserStore.addChangeListener(this.onStoreChange);
-        PasswordStore.addChangeListener(this.onStoreChange);
-    },
-    componentWillUnmount: function () {
+    return {
+      user: UserStore.getState(),
+      password: PasswordStore.getState(),
+      userGroup: UserGroupStore.getState()
+    };
+  },
+  componentDidMount: function () {
 
-        AccountStore.removeChangeListener(this.onStoreChange);
-        UserStore.removeChangeListener(this.onStoreChange);
-        PasswordStore.removeChangeListener(this.onStoreChange);
-    },
-    onStoreChange: function () {
+    UserStore.addChangeListener(this.onStoreChange);
+    PasswordStore.addChangeListener(this.onStoreChange);
+    UserGroupStore.addChangeListener(this.onStoreChange);
+  },
+  componentWillUnmount: function () {
 
-        this.setState(this.getStateFromStores());
-    },
-    render: function () {
+    UserStore.removeChangeListener(this.onStoreChange);
+    PasswordStore.removeChangeListener(this.onStoreChange);
+    UserGroupStore.removeChangeListener(this.onStoreChange);
+  },
+  onStoreChange: function () {
 
-        return (
-            <section className="section-settings container">
-                <h1 className="page-header">Account settings</h1>
-                <div className="row">
-                    <div className="col-sm-6">
-                        <AccountForm data={this.state.account} />
-                        <UserForm data={this.state.user} />
-                        <PasswordForm data={this.state.password} />
-                    </div>
-                </div>
-            </section>
-        );
-    }
+    this.setState(this.getStateFromStores());
+  },
+  render: function () {
+
+    return (
+      <section className="section-settings container">
+        <h1 className="page-header">账号设置</h1>
+        <div className="row">
+          <div className="col-sm-6">
+            <UserForm data={this.state.user}/>
+            <UserGroupForm
+              data={this.state.userGroup}
+              user={this.state.user}
+            />
+            <PasswordForm data={this.state.password}/>
+          </div>
+        </div>
+      </section>
+    );
+  }
 });
 
 

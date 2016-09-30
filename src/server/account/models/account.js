@@ -18,44 +18,21 @@ Account._collection = 'accounts';
 
 Account.schema = Joi.object().keys({
     _id: Joi.object(),
-    user: Joi.object().keys({
-        id: Joi.string().required(),
-        name: Joi.string().lowercase().required()
-    }),
-    name: Joi.object().keys({
-        first: Joi.string().required(),
-        middle: Joi.string().allow(''),
-        last: Joi.string().required()
-    }),
-    status: Joi.object().keys({
-        current: StatusEntry.schema,
-        log: Joi.array().items(StatusEntry.schema)
-    }),
-    notes: Joi.array().items(NoteEntry.schema),
-    verification: Joi.object().keys({
-        complete: Joi.boolean(),
-        token: Joi.string()
-    }),
+    name: Joi.string().required(),
+    permissions: Joi.object().description('{ permission: boolean, ... }'),
     timeCreated: Joi.date()
 });
 
 
 Account.indexes = [
-    [{ 'user.id': 1 }],
-    [{ 'user.name': 1 }]
+    [{ 'name': 1 }]
 ];
 
 
 Account.create = function (name, callback) {
 
-    var nameParts = name.trim().split(/\s/);
-
     var document = {
-        name: {
-            first: nameParts.shift(),
-            middle: nameParts.length > 1 ? nameParts.shift() : undefined,
-            last: nameParts.join(' ')
-        },
+        name: name.toLowerCase(),
         timeCreated: new Date()
     };
 
@@ -72,7 +49,7 @@ Account.create = function (name, callback) {
 
 Account.findByUsername = function (username, callback) {
 
-    var query = { 'user.name': username.toLowerCase() };
+    var query = { 'name': username.toLowerCase() };
     this.findOne(query, callback);
 };
 

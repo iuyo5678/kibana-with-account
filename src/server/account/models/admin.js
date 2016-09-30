@@ -3,7 +3,7 @@ var Async = require('async');
 var ObjectAssign = require('object-assign');
 var BaseModel = require('hapi-mongo-models').BaseModel;
 var AdminGroup = require('./admin-group');
-
+var Slug = require('slug');
 
 var Admin = BaseModel.extend({
     constructor: function (attrs) {
@@ -96,11 +96,7 @@ Admin.schema = Joi.object().keys({
     }),
     groups: Joi.object().description('{ groupId: name, ... }'),
     permissions: Joi.object().description('{ permission: boolean, ... }'),
-    name: Joi.object().keys({
-        first: Joi.string().required(),
-        middle: Joi.string().allow(['', null]),
-        last: Joi.string().required()
-    }),
+    name: Joi.string().required(),
     timeCreated: Joi.date()
 });
 
@@ -113,14 +109,8 @@ Admin.indexes = [
 
 Admin.create = function (name, callback) {
 
-    var nameParts = name.trim().split(/\s/);
-
     var document = {
-        name: {
-            first: nameParts.shift(),
-            middle: nameParts.length > 1 ? nameParts.shift() : undefined,
-            last: nameParts.join(' ')
-        },
+        name:  name,
         timeCreated: new Date()
     };
 

@@ -22,7 +22,6 @@ var Component = React.createClass({
 
         return {
             details: UserRequestStore.getDetails(),
-            delete: UserRequestStore.getDelete()
         };
     },
     componentDidMount: function () {
@@ -36,8 +35,7 @@ var Component = React.createClass({
     onStoreChange: function () {
 
         this.setState({
-            details: UserRequestStore.getDetails(),
-            delete: UserRequestStore.getDelete()
+            details: UserRequestStore.getDetails()
         });
     },
     render: function () {

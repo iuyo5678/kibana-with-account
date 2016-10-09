@@ -104,8 +104,8 @@ Async.auto({
         return done(err);
       }
 
-      configTemplate = Handlebars.compile(src);
-      Fs.writeFile(configPath, configTemplate(results), done);
+      var configTemplateResult = Handlebars.compile(src);
+      Fs.writeFile(configPath, configTemplateResult(results), done);
     });
   }],
   setupRootUser: ['createConfig', function (done, results) {
@@ -144,7 +144,7 @@ Async.auto({
       }],
       userGroup:['clean', function (done) {
 
-        UserGroup.create("default", done);
+        UserGroup.create('default', done);
       }],
       user: ['clean', function (done, dbResults) {
 
@@ -173,7 +173,7 @@ Async.auto({
               id: dbResults.adminGroupRoot._id.toString(),
               name: dbResults.adminGroupRoot.name.toString()
             },
-            group: "default"
+            group: 'default'
           }
         };
 

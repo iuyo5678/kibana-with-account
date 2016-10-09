@@ -52,7 +52,7 @@ define(function (require) {
       },
 
       /**
-       * Fetch the multiple responses from the ES Response
+       * fetch the multiple responses from the ES Response
        * @param  {object} resp - The response sent from Elasticsearch
        * @return {array} - the list of responses
        */

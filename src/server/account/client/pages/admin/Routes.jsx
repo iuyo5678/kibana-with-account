@@ -20,21 +20,21 @@ var NotFoundRoute = ReactRouter.NotFoundRoute;
 
 
 var routes = (
-    <Route path="/admin" name="app" handler={App}>
-        <DefaultRoute name="home" handler={Home} />
-        <NotFoundRoute name="notFound" handler={NotFound} />
+  <Route path="/admin" name="app" handler={App}>
+    <DefaultRoute name="home" handler={Home}/>
+    <NotFoundRoute name="notFound" handler={NotFound}/>
 
-        <Route path="admins" name="admins" handler={AdminSearch} />
-        <Route path="admins/:id" name="adminDetails" handler={AdminDetails} />
-        <Route path="admin-groups" name="adminGroups" handler={AdminGroupSearch} />
-        <Route path="admin-groups/:id" name="adminGroupDetails" handler={AdminGroupDetails} />
-        <Route path="user-request" name="userRequest" handler={UserRequestSearch} />
-        <Route path="user-request/:id" name="userRequestDetails" handler={UserRequestDetails} />
-        <Route path="users" name="users" handler={UserSearch} />
-        <Route path="users/:id" name="userDetails" handler={UserDetails} />
-        <Route path="user-groups" name="userGroups" handler={UserGroupSearch} />
-        <Route path="user-groups/:id" name="userGroupsDetail" handler={UserGroupDetails} />
-    </Route>
+    <Route path="admins" name="admins" handler={AdminSearch}/>
+    <Route path="admins/:id" name="adminDetails" handler={AdminDetails}/>
+    <Route path="admin-groups" name="adminGroups" handler={AdminGroupSearch}/>
+    <Route path="admin-groups/:id" name="adminGroupDetails" handler={AdminGroupDetails}/>
+    <Route path="user-request" name="userRequest" handler={UserRequestSearch}/>
+    <Route path="user-request/:id" name="userRequestDetails" handler={UserRequestDetails}/>
+    <Route path="users" name="users" handler={UserSearch}/>
+    <Route path="users/:id" name="userDetails" handler={UserDetails}/>
+    <Route path="user-groups" name="userGroups" handler={UserGroupSearch}/>
+    <Route path="user-groups/:id" name="userGroupsDetail" handler={UserGroupDetails}/>
+  </Route>
 );
 
 

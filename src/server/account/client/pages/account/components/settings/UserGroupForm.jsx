@@ -61,7 +61,7 @@ var Component = React.createClass({
 
     Actions.saveUserGroupSettings({
       opType: "changeGroup",
-      opParameter:{
+      opParameter: {
         oldGroup: currentGroup,
         newGroup: newGroupValue
       },
@@ -121,7 +121,7 @@ var Component = React.createClass({
         <ControlGroup hideLabel={true} hideHelp={true}>
           <Button
             type="submit"
-            inputClasses={{ 'btn-primary': true }}
+            inputClasses={{'btn-primary': true}}
             disabled={this.props.data.loading}>
 
             更新用户组
@@ -133,7 +133,6 @@ var Component = React.createClass({
         </ControlGroup>
       </fieldset>;
     }
-
 
 
     return (

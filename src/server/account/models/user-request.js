@@ -1,6 +1,6 @@
 var Joi = require('joi');
 var Async = require('async');
-var ObjectAssign = require('object-assign');
+var objectAssign = require('object-assign');
 var BaseModel = require('hapi-mongo-models').BaseModel;
 var Slug = require('slug');
 
@@ -8,7 +8,7 @@ var Slug = require('slug');
 var UserRequest = BaseModel.extend({
   constructor: function (attrs) {
 
-    ObjectAssign(this, attrs);
+    objectAssign(this, attrs);
   }
 
 });
@@ -25,7 +25,7 @@ UserRequest.schema = Joi.object().keys({
   opType: Joi.string().required(),
   opParameter: Joi.object().description('{ name: value, ... }'),
   isClosed: Joi.boolean().default(false),
-  executor:Joi.object().keys({
+  executor: Joi.object().keys({
     id: Joi.string().required(),
     name: Joi.string().lowercase().required()
   }),
@@ -34,8 +34,8 @@ UserRequest.schema = Joi.object().keys({
 });
 
 UserRequest.indexes = [
-    [{ 'user.id': 1 }],
-    [{ 'user.name': 1 }]
+  [{'user.id': 1}],
+  [{'user.name': 1}]
 ];
 
 UserRequest.create = function (user, opType, opParameter, callback) {

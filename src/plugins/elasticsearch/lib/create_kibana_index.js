@@ -2,7 +2,7 @@ var SetupError = require('./setup_error');
 var format = require('util').format;
 module.exports = function (server, index) {
   var client = server.plugins.elasticsearch.client;
-  if (!index){
+  if (!index) {
     index = server.config().get('kibana.index');
   }
 

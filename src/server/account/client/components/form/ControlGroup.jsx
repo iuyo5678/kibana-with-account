@@ -4,43 +4,43 @@ var ClassNames = require('classnames');
 
 
 var View = React.createClass({
-    render: function () {
+  render: function () {
 
-        var groupClasses = ClassNames(ObjectAssign({
-            'form-group': true,
-            'has-error': this.props.hasError
-        }, this.props.groupClasses));
+    var groupClasses = ClassNames(ObjectAssign({
+      'form-group': true,
+      'has-error': this.props.hasError
+    }, this.props.groupClasses));
 
-        var labelClasses = ClassNames(ObjectAssign({
-            'control-label': true
-        }, this.props.labelClasses));
+    var labelClasses = ClassNames(ObjectAssign({
+      'control-label': true
+    }, this.props.labelClasses));
 
-        var helpClasses = ClassNames(ObjectAssign({
-            'help-block': true
-        }, this.props.helpClasses));
+    var helpClasses = ClassNames(ObjectAssign({
+      'help-block': true
+    }, this.props.helpClasses));
 
-        var labelComponent;
-        if (!this.props.hideLabel) {
-            labelComponent = <label className={labelClasses}>
-                {this.props.label}
-            </label>;
-        }
+    var labelComponent;
+    if (!this.props.hideLabel) {
+      labelComponent = <label className={labelClasses}>
+        {this.props.label}
+      </label>;
+    }
 
-        var helpComponent;
-        if (!this.props.hideHelp) {
-            helpComponent = <span className={helpClasses}>
+    var helpComponent;
+    if (!this.props.hideHelp) {
+      helpComponent = <span className={helpClasses}>
                 {this.props.help}
             </span>;
-        }
-
-        return (
-            <div className={groupClasses}>
-                {labelComponent}
-                {this.props.children}
-                {helpComponent}
-            </div>
-        );
     }
+
+    return (
+      <div className={groupClasses}>
+        {labelComponent}
+        {this.props.children}
+        {helpComponent}
+      </div>
+    );
+  }
 });
 
 

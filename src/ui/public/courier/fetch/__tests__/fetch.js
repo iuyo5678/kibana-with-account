@@ -6,7 +6,7 @@ import FetchProvider from 'ui/courier/fetch';
 import IndexPatternProvider from 'fixtures/stubbed_logstash_index_pattern';
 import searchResp from 'fixtures/search_response';
 
-describe('Fetch service', function () {
+describe('fetch service', function () {
   require('testUtils/noDigestPromises').activateForSuite();
 
   let es;

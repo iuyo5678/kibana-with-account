@@ -129,7 +129,7 @@ exports.register = function (server, options, next) {
           username: request.pre.user.username,
           email: request.pre.user.email,
           roles: request.pre.user.roles,
-          index : request.pre.user.index
+          index: request.pre.user.index
         },
         session: request.pre.session,
         authHeader: authHeader

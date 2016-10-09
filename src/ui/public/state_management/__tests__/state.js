@@ -85,7 +85,7 @@ describe('State Management', function () {
     });
   });
 
-  describe('Fetch', function () {
+  describe('fetch', function () {
     it('should emit an event if changes are fetched', function (done) {
       var state = new State();
       state.on('fetch_with_changes', function (keys) {

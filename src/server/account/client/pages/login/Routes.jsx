@@ -14,14 +14,14 @@ var NotFoundRoute = ReactRouter.NotFoundRoute;
 
 
 var Routes = (
-    <Route path="/login" name="app" handler={App}>
-        <DefaultRoute name="home" handler={Home} />
-        <NotFoundRoute name="notFound" handler={NotFound} />
+  <Route path="/login" name="app" handler={App}>
+    <DefaultRoute name="home" handler={Home}/>
+    <NotFoundRoute name="notFound" handler={NotFound}/>
 
-        <Route path="forgot" name="forgot" handler={Forgot} />
-        <Route path="reset/:email/:key" name="reset" handler={Reset} />
-        <Route path="logout" name="logout" handler={Logout} />
-    </Route>
+    <Route path="forgot" name="forgot" handler={Forgot}/>
+    <Route path="reset/:email/:key" name="reset" handler={Reset}/>
+    <Route path="logout" name="logout" handler={Logout}/>
+  </Route>
 );
 
 

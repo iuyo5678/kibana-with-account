@@ -3,7 +3,7 @@
  */
 var Dispatcher = require('flux-dispatcher');
 var Constants = require('../constants/UserGroup');
-var Fetch = require('../../../helpers/jsonFetch');
+var fetch = require('../../../helpers/jsonFetch');
 
 
 var VIEW_ACTION = Constants.PayloadSources.VIEW_ACTION;
@@ -24,7 +24,7 @@ var Actions = {
       useAuth: true
     };
 
-    Fetch(request, function (err, response) {
+    fetch(request, function (err, response) {
 
       if (!err) {
         response.success = true;
@@ -43,7 +43,7 @@ var Actions = {
       useAuth: true
     };
 
-    Fetch(request, function (err, response) {
+    fetch(request, function (err, response) {
 
       if (err) {
         response.fetchFailure = true;
@@ -72,7 +72,7 @@ var Actions = {
       useAuth: true
     };
 
-    Fetch(request, function (err, response) {
+    fetch(request, function (err, response) {
 
       if (!err) {
         response.success = true;
@@ -100,7 +100,7 @@ var Actions = {
       useAuth: true
     };
 
-    Fetch(request, function (err, response) {
+    fetch(request, function (err, response) {
 
       if (!err) {
         response.success = true;

@@ -26,7 +26,7 @@ module.exports = App;
 
 /* $lab:coverage:off$ */
 if (!module.parent) {
-    window.app = App;
-    App.blastoff();
+  window.app = App;
+  App.blastoff();
 }
 /* $lab:coverage:on$ */

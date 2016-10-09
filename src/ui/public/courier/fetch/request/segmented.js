@@ -6,7 +6,7 @@ define(function (require) {
     var SegmentedHandle = Private(require('ui/courier/fetch/request/_segmented_handle'));
 
     var notify = new Notifier({
-      location: 'Segmented Fetch'
+      location: 'Segmented fetch'
     });
 
     _.class(SegmentedReq).inherits(SearchReq);

@@ -4,31 +4,31 @@ var ClassNames = require('classnames');
 
 
 var View = React.createClass({
-    getDefaultProps: function () {
+  getDefaultProps: function () {
 
-        return {
-            type: 'button'
-        };
-    },
-    render: function () {
+    return {
+      type: 'button'
+    };
+  },
+  render: function () {
 
-        var inputClasses = ClassNames(ObjectAssign({
-            'btn': true
-        }, this.props.inputClasses));
+    var inputClasses = ClassNames(ObjectAssign({
+      'btn': true
+    }, this.props.inputClasses));
 
-        return (
-            <button
-                type={this.props.type}
-                className={inputClasses}
-                name={this.props.name}
-                value={this.props.value}
-                disabled={this.props.disabled ? 'disabled' : undefined}
-                onClick={this.props.onClick}>
+    return (
+      <button
+        type={this.props.type}
+        className={inputClasses}
+        name={this.props.name}
+        value={this.props.value}
+        disabled={this.props.disabled ? 'disabled' : undefined}
+        onClick={this.props.onClick}>
 
-                {this.props.children}
-            </button>
-        );
-    }
+        {this.props.children}
+      </button>
+    );
+  }
 });
 
 

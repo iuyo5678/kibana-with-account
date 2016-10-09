@@ -1,6 +1,6 @@
 var createAgent = require('./create_agent');
 var mapUri = require('./map_uri');
-var preResponse = require('./pre_process_response')
+var preResponse = require('./pre_process_response');
 var { resolve } = require('url');
 
 module.exports = function createProxy(server, method, route, config) {

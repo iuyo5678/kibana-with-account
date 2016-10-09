@@ -109,34 +109,40 @@ exports.register = function (server, options, next) {
       var User = request.server.plugins['hapi-mongo-models'].User;
       var UserRequest = request.server.plugins['hapi-mongo-models'].UserRequest;
       Async.auto({
-          user: function (done) {
-            var userFilter = {
-              username: request.payload.username,
-              group: request.payload.oldGroup
-            };
-            var userUpdate = {
-              $set: {
-                group: request.payload.newGroup
-              }
-            };
-            User.findOneAndUpdate(userFilter, userUpdate, done);
-          },
-          requestFinish: ['user', function (done, results) {
-            UserRequest.findByIdAndUpdate(id, update, done);
-          }]
-        }, function (err, results) {
-          if (err) {
-            return reply(err);
-          }
-          if (!results.user) {
-            return reply({message: 'User not found.'}).code(404);
-          }
-          if (!results.requestFinish) {
-            return reply({message: 'The UserRequest not found.'}).code(404);
-          }
-          reply(results);
+        user: function (done) {
+          var userFilter = {
+            username: request.payload.username,
+            group: request.payload.oldGroup
+          };
+          var userUpdate = {
+            $set: {
+              group: request.payload.newGroup
+            }
+          };
+          User.findOneAndUpdate(userFilter, userUpdate, done);
+        },
+        requestFinish: ['user', function (done, results) {
+          var id = request.params.id;
+          var update = {
+            $set: {
+              isClosed: true,
+              timeExecutor: new Date()
+            }
+          };
+          UserRequest.findByIdAndUpdate(id, update, done);
+        }]
+      }, function (err, results) {
+        if (err) {
+          return reply(err);
         }
-      );
+        if (!results.user) {
+          return reply({message: 'User not found.'}).code(404);
+        }
+        if (!results.requestFinish) {
+          return reply({message: 'The UserRequest not found.'}).code(404);
+        }
+        reply(results);
+      });
 
 
       var id = request.params.id;

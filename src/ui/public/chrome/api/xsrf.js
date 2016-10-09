@@ -15,7 +15,8 @@ export default function (chrome, internals) {
     }
     var cookies = Cookie.parse(document.cookie);
     if (cookies.crumb) {
-      config.headers['X-CSRF-Token'] = cookies.crumb;
+      jqXHR.setRequestHeader('X-CSRF-Token', cookies.crumb);
+      //config.headers['X-CSRF-Token'] = cookies.crumb;
     }
   });
 

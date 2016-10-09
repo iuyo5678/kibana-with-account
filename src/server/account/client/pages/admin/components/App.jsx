@@ -5,16 +5,16 @@ var Footer = require('./Footer');
 
 
 var Component = React.createClass({
-    render: function () {
+  render: function () {
 
-        return (
-            <div>
-                <NavBar />
-                <ReactRouter.RouteHandler />
-                <Footer />
-            </div>
-        );
-    }
+    return (
+      <div>
+        <NavBar />
+        <ReactRouter.RouteHandler />
+        <Footer />
+      </div>
+    );
+  }
 });
 
 

@@ -3,12 +3,12 @@ var ReactRouter = require('react-router');
 
 
 var Component = React.createClass({
-    render: function () {
+  render: function () {
 
-        return (
-            <ReactRouter.RouteHandler />
-        );
-    }
+    return (
+      <ReactRouter.RouteHandler />
+    );
+  }
 });
 
 

@@ -1,7 +1,7 @@
 /* global window */
 var Dispatcher = require('flux-dispatcher');
 var Constants = require('./Constants');
-var Fetch = require('../../helpers/jsonFetch');
+var fetch = require('../../helpers/jsonFetch');
 var RedirectActions = require('../../actions/Redirect');
 
 var VIEW_ACTION = Constants.PayloadSources.VIEW_ACTION;
@@ -22,7 +22,7 @@ var Actions = {
       data: data
     };
 
-    Fetch(request, function (err, response) {
+    fetch(request, function (err, response) {
 
       if (!err) {
         response.success = true;
@@ -41,7 +41,7 @@ var Actions = {
       data: data
     };
 
-    Fetch(request, function (err, response) {
+    fetch(request, function (err, response) {
 
       if (!err) {
         var returnUrl = window.localStorage.getItem('returnUrl');
@@ -76,7 +76,7 @@ var Actions = {
       useAuth: true
     };
 
-    Fetch(request, function (err, response) {
+    fetch(request, function (err, response) {
 
       if (!err) {
         cookie.remove('index');
@@ -99,7 +99,7 @@ var Actions = {
       data: data
     };
 
-    Fetch(request, function (err, response) {
+    fetch(request, function (err, response) {
 
       if (!err) {
         response.success = true;

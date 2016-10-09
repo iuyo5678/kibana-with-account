@@ -2,22 +2,22 @@ var React = require('react/addons');
 
 
 var Component = React.createClass({
-    render: function () {
+  render: function () {
 
-        return (
-            <div className="footer">
-                <div className="container">
+    return (
+      <div className="footer">
+        <div className="container">
                     <span className="copyright pull-right">
                         &#169; 2016 zgh, Inc.
                     </span>
-                    <ul className="links">
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/login/logout">Sign out</a></li>
-                    </ul>
-                </div>
-            </div>
-        );
-    }
+          <ul className="links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/login/logout">Sign out</a></li>
+          </ul>
+        </div>
+      </div>
+    );
+  }
 });
 
 

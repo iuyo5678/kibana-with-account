@@ -1,6 +1,6 @@
 var Dispatcher = require('flux-dispatcher');
 var Constants = require('./Constants');
-var Fetch = require('../../helpers/jsonFetch');
+var fetch = require('../../helpers/jsonFetch');
 
 
 var VIEW_ACTION = Constants.PayloadSources.VIEW_ACTION;
@@ -21,7 +21,7 @@ var Actions = {
       useAuth: true
     };
 
-    Fetch(request, function (err, response) {
+    fetch(request, function (err, response) {
 
       dispatch(SERVER_ACTION, Types.GET_ACCOUNT_SETTINGS_RESPONSE, response);
     });
@@ -37,7 +37,7 @@ var Actions = {
       useAuth: true
     };
 
-    Fetch(request, function (err, response) {
+    fetch(request, function (err, response) {
 
       if (!err) {
         response.success = true;
@@ -57,7 +57,7 @@ var Actions = {
       useAuth: true
     };
 
-    Fetch(request, function (err, response) {
+    fetch(request, function (err, response) {
 
       dispatch(SERVER_ACTION, Types.GET_USER_SETTINGS_RESPONSE, response);
     });
@@ -73,7 +73,7 @@ var Actions = {
       useAuth: true
     };
 
-    Fetch(request, function (err, response) {
+    fetch(request, function (err, response) {
 
       if (!err) {
         response.success = true;
@@ -90,12 +90,12 @@ var Actions = {
       data: data,
       useAuth: true
     };
-    Fetch(request, function (err, response) {
-      if(!err) {
+    fetch(request, function (err, response) {
+      if (!err) {
         response.success = true;
       }
       dispatch(SERVER_ACTION, Types.GET_USER_GROUP_SETTINGS_RESPONSE, response);
-    })
+    });
   },
 
   saveUserGroupSettings: function (data) {
@@ -106,12 +106,12 @@ var Actions = {
       data: data,
       useAuth: true
     };
-    Fetch(request, function (err, response) {
-      if(!err) {
+    fetch(request, function (err, response) {
+      if (!err) {
         response.success = true;
       }
-      dispatch(SERVER_ACTION, Types.SAVE_USER_GROUP_SETTINGS_RESPONSE, response)
-    })
+      dispatch(SERVER_ACTION, Types.SAVE_USER_GROUP_SETTINGS_RESPONSE, response);
+    });
   },
 
   getAllUserGroupSettings: function (data) {
@@ -122,12 +122,12 @@ var Actions = {
       data: data,
       useAuth: true
     };
-    Fetch(request, function (err, response) {
-      if(!err) {
+    fetch(request, function (err, response) {
+      if (!err) {
         response.success = true;
       }
       dispatch(SERVER_ACTION, Types.GET_ALL_GROUP_SETTINGS_RESPONSE, response);
-    })
+    });
   },
 
   savePasswordSettings: function (data) {
@@ -151,7 +151,7 @@ var Actions = {
       useAuth: true
     };
 
-    Fetch(request, function (err, response) {
+    fetch(request, function (err, response) {
 
       if (!err) {
         response.success = true;

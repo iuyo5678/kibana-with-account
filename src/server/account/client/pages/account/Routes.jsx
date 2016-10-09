@@ -12,12 +12,12 @@ var NotFoundRoute = ReactRouter.NotFoundRoute;
 
 
 var routes = (
-    <Route path="/account" name="app" handler={App}>
-        <DefaultRoute name="home" handler={Home} />
-        <NotFoundRoute name="notFound" handler={NotFound} />
+  <Route path="/account" name="app" handler={App}>
+    <DefaultRoute name="home" handler={Home}/>
+    <NotFoundRoute name="notFound" handler={NotFound}/>
 
-        <Route path="settings" name="settings" handler={Settings} />
-    </Route>
+    <Route path="settings" name="settings" handler={Settings}/>
+  </Route>
 );
 
 

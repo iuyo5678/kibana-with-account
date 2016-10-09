@@ -27,21 +27,21 @@ define(function (require) {
     }
 
     /**
-     * Fetch a single doc source
+     * fetch a single doc source
      * @param {DocSource} source - The DocSource to request
      * @async
      */
     this.doc = fetchASource;
 
     /**
-     * Fetch a single search source
+     * fetch a single search source
      * @param {SearchSource} source - The SearchSource to request
      * @async
      */
     this.search = fetchASource;
 
     /**
-     * Fetch a list of requests
+     * fetch a list of requests
      * @param {array} reqs - the requests to fetch
      * @async
      */

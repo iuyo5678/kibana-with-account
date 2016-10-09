@@ -5,10 +5,10 @@ var http = require('http');
 var https = require('https');
 
 module.exports = _.memoize(function (server) {
-    var target = url.parse("http://127.0.0.1:8080/");
-    
-    if (!/^https/.test(target.protocol)) return new http.Agent();
-    
+  var target = url.parse('http://127.0.0.1:8080/');
+
+  if (!/^https/.test(target.protocol)) return new http.Agent();
+
 });
 
 // See https://lodash.com/docs#memoize: We use a Map() instead of the default, because we want the keys in the cache

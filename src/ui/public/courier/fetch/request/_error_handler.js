@@ -3,7 +3,7 @@ define(function (require) {
     var errHandlers = Private(require('ui/courier/_error_handlers'));
 
     var notify = new Notifier({
-      location: 'Courier Fetch Error'
+      location: 'Courier fetch Error'
     });
 
     function handleError(req, error) {

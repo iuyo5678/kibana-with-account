@@ -4,13 +4,13 @@ var FormView = require('./Form');
 
 
 var App = {
-    blastoff: function () {
+  blastoff: function () {
 
-        this.mainElement = React.render(
-            <FormView />,
-            window.document.getElementById('app-mount')
-        );
-    }
+    this.mainElement = React.render(
+      <FormView />,
+      window.document.getElementById('app-mount')
+    );
+  }
 };
 
 
@@ -19,7 +19,7 @@ module.exports = App;
 
 /* $lab:coverage:off$ */
 if (!module.parent) {
-    window.app = App;
-    App.blastoff();
+  window.app = App;
+  App.blastoff();
 }
 /* $lab:coverage:on$ */

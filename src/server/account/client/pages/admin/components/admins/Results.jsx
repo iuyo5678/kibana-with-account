@@ -7,51 +7,51 @@ var Link = ReactRouter.Link;
 
 
 var Component = React.createClass({
-    mixins: [LinkedState],
-    getDefaultProps: function () {
+  mixins: [LinkedState],
+  getDefaultProps: function () {
 
-        return {
-            data: []
-        };
-    },
-    render: function () {
+    return {
+      data: []
+    };
+  },
+  render: function () {
 
-        var rows = this.props.data.map(function (record) {
+    var rows = this.props.data.map(function (record) {
 
-            return (
-                <tr key={record._id}>
-                    <td>
-                        <Link
-                            className="btn btn-default btn-sm"
-                            to="adminDetails"
-                            params={{ id: record._id }}>
+      return (
+        <tr key={record._id}>
+          <td>
+            <Link
+              className="btn btn-default btn-sm"
+              to="adminDetails"
+              params={{id: record._id}}>
 
-                            Edit
-                        </Link>
-                    </td>
-                    <td>{record.name.first} {record.name.last}</td>
-                    <td>{record._id}</td>
-                </tr>
-            );
-        });
+              Edit
+            </Link>
+          </td>
+          <td>{record.name.first} {record.name.last}</td>
+          <td>{record._id}</td>
+        </tr>
+      );
+    });
 
-        return (
-            <div className="table-responsive">
-                <table className="table table-striped table-results">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th className="stretch">name</th>
-                            <th>id</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {rows}
-                    </tbody>
-                </table>
-            </div>
-        );
-    }
+    return (
+      <div className="table-responsive">
+        <table className="table table-striped table-results">
+          <thead>
+          <tr>
+            <th></th>
+            <th className="stretch">name</th>
+            <th>id</th>
+          </tr>
+          </thead>
+          <tbody>
+          {rows}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
 });
 
 

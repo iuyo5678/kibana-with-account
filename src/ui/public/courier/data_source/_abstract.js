@@ -157,7 +157,7 @@ define(function (require) {
     };
 
     /**
-     * Fetch just this source ASAP
+     * fetch just this source ASAP
      *
      * ONLY USE IF YOU WILL BE USING THE RESULTS
      * provided by the returned promise, otherwise
@@ -179,7 +179,7 @@ define(function (require) {
     };
 
     /**
-     * Fetch all pending requests for this source ASAP
+     * fetch all pending requests for this source ASAP
      * @async
      */
     SourceAbstract.prototype.fetchQueued = function () {

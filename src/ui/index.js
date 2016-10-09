@@ -47,7 +47,7 @@ module.exports = async (kbnServer, server, config) => {
     path: '/app/{id}',
     method: 'GET',
     config: {
-      auth: "session",
+      auth: 'session',
       handler: function (req, reply) {
         let id = req.params.id;
         let app = uiExports.apps.byId[id];

@@ -3,23 +3,23 @@ var Hoek = require('hoek');
 
 exports.register = function (server, options, next) {
 
-    options = Hoek.applyToDefaults({ basePath: '' }, options);
+  options = Hoek.applyToDefaults({basePath: ''}, options);
 
 
-    server.route({
-        method: 'GET',
-        path: options.basePath + '/',
-        handler: function (request, reply) {
+  server.route({
+    method: 'GET',
+    path: options.basePath + '/',
+    handler: function (request, reply) {
 
-            reply({ message: 'Welcome to the plot device.' });
-        }
-    });
+      reply({message: 'Welcome to the plot device.'});
+    }
+  });
 
 
-    next();
+  next();
 };
 
 
 exports.register.attributes = {
-    name: 'home'
+  name: 'home'
 };

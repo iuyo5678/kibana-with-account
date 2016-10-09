@@ -69,7 +69,7 @@ exports.register = function (server, options, next) {
             if (!user) {
               return reply(user);
             }
-            UserGroup.findGroupById(user.group, function (err, result) {
+            UserGroup.findGroupByName(user.group, function (err, result) {
               if (err) {
                 return reply(err);
               }

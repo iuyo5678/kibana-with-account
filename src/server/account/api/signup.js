@@ -146,7 +146,7 @@ exports.register = function (server, options, next) {
           Session.create(results.user._id.toString(), done);
         }],
         group: ['linkAccount', function (done, results) {
-          UserGroup.findGroupById(results.user.group, done);
+          UserGroup.findGroupByName(results.user.group, done);
         }]
       }, function (err, results) {
 

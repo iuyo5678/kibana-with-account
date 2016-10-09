@@ -66,7 +66,7 @@ exports.register = function (server, options, next) {
 
       var UserGroup = request.server.plugins['hapi-mongo-models'].UserGroup;
 
-      UserGroup.findGroupById(request.params.id, function (err, userGroup) {
+      UserGroup.findGroupByName(request.params.id, function (err, userGroup) {
 
         if (err) {
           return reply(err);

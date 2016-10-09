@@ -128,7 +128,8 @@ Async.auto({
           User.deleteMany.bind(User, {}),
           Admin.deleteMany.bind(Admin, {}),
           AdminGroup.deleteMany.bind(AdminGroup, {}),
-          UserGroup.deleteMany.bind(UserGroup, {})
+          UserGroup.deleteMany.bind(UserGroup, {}),
+          UserRequest.deleteMany.bind(UserRequest, {})
         ], done);
       }],
       adminGroupDefault: ['clean', function (done) {

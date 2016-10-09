@@ -25,7 +25,7 @@ UserGroup._collection = 'userGroups';
 UserGroup._idClass = String;
 
 UserGroup.schema = Joi.object().keys({
-  _id: Joi.string(),
+  _id: Joi.object(),
   name: Joi.string().required(),
   index: Joi.string().required()
 });
@@ -37,8 +37,7 @@ UserGroup.indexes = [
 UserGroup.create = function (name, callback) {
   var indexSuffix = Math.random().toString(36).substr(2);
   var document = {
-    _id: slug(name).toLowerCase(),
-    name: name,
+    name: name.toLowerCase(),
     index: '.'.concat((name).toLowerCase(), indexSuffix)
   };
 
@@ -52,12 +51,12 @@ UserGroup.create = function (name, callback) {
   });
 };
 
-UserGroup.findGroupById = function (name, callback) {
+UserGroup.findGroupByName = function (name, callback) {
   var self = this;
   Async.auto({
     group: function (done) {
       var query = {
-        _id: name
+        name: name.toLowerCase()
       };
 
       self.findOne(query, done);

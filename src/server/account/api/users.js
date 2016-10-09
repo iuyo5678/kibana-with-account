@@ -231,7 +231,7 @@ exports.register = function (server, options, next) {
 
       var id = request.auth.credentials.user.group.toString();
 
-      UserGroup.findGroupById(id, function (err, group) {
+      UserGroup.findGroupByName(id, function (err, group) {
         if (err) {
           return reply(err);
         }

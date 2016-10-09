@@ -13,7 +13,7 @@ module.exports = (kbnServer, server, config) => {
 
   function localLog(err) {
     if (err) {
-      warning({tmpl: 'unable to register plugin name : <%= name %> in server account module', name: name});
+      warning({tmpl: 'unable to register plugin name : <%= name %> in server account module', name: err});
     }
   }
 
@@ -67,12 +67,8 @@ module.exports = (kbnServer, server, config) => {
     server.register({
       register: require(name),
       options: serverPlugins[name]
-    }, localLog(err));
+    }, localLog);
   }
-  //let createProxy = require('./proxy/create_proxy');
-
-  //createProxy(server, 'GET','/admin_control', '/{paths*}');
-  //createProxy(server, 'GET','/static', '/{paths*}');
 
   let CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
   let UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;

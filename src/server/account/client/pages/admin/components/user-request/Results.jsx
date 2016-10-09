@@ -17,11 +17,26 @@ var Component = React.createClass({
 
         var rows = this.props.data.map(function (record) {
           var closedFlag = "";
-          var opType = ""
+          var opType = "";
+          var link;
           if (record.isClosed) {
             closedFlag = "已处理";
+            link = <Link
+              className="btn btn-default btn-sm"
+              to="userRequestDetails"
+              params={{id: record._id}}>
+
+              查看详情
+            </Link>;
           } else  {
             closedFlag = "未处理";
+            link = <Link
+              className="btn btn-default btn-sm"
+              to="userRequestDetails"
+              params={{id: record._id}}>
+
+              处理
+            </Link>;
           }
           if (record.opType == "changeGroup") {
             opType = "更换用户组";
@@ -29,13 +44,7 @@ var Component = React.createClass({
             return (
                 <tr key={record._id}>
                     <td>
-                        <Link
-                            className="btn btn-default btn-sm"
-                            to="userRequestDetails"
-                            params={{ id: record._id }}>
-
-                            Edit
-                        </Link>
+                      {link}
                     </td>
                     <td>{opType}</td>
                     <td>{record.user.name}</td>

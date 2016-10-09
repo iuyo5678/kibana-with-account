@@ -57,7 +57,6 @@ var Actions = {
         dispatch(VIEW_ACTION, Types.SAVE_DETAILS, data);
 
         var id = data.id;
-        delete data.id;
 
         var request = {
             method: 'PUT',

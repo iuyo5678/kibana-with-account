@@ -30,8 +30,10 @@ var Store = FluxStore.extend({
             hasError: {},
             help: {},
             _id: undefined,
-            pivot: undefined,
-            name: undefined
+          user: undefined,
+          opType: undefined,
+          timeCreated: undefined,
+          opParameter: undefined
         }
     },
     getState: function () {
@@ -111,8 +113,14 @@ var Store = FluxStore.extend({
             this.state.details.fetchFailure = action.data.fetchFailure;
             this.state.details.success = action.data.success;
             this.state.details._id = action.data._id;
-            this.state.details.pivot = action.data.pivot;
-            this.state.details.name = action.data.name;
+          this.state.details.username = action.data.user.name;
+          this.state.details.opType = action.data.opType;
+          this.state.details.opParameter = action.data.opParameter;
+          this.state.details.timeCreated = action.data.timeCreated;
+          this.state.details.isClosed = action.data.isClosed;
+          if (action.data.isClosed) {
+            this.state.details.timeExecutor = action.data.timeExecutor;
+          }
             this.emitChange();
         }
 

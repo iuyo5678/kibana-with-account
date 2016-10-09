@@ -61,10 +61,6 @@ var Component = React.createClass({
                 <div className="row">
                     <div className="col-sm-6">
                         <DetailsForm data={this.state.details} />
-                        <DeleteForm
-                            details={this.state.details}
-                            data={this.state.delete}
-                        />
                     </div>
                 </div>
             </section>

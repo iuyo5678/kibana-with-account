@@ -7,7 +7,6 @@ var SelectControl = require('../../../../components/form/SelectControl');
 var Component = React.createClass({
     mixins: [React.addons.LinkedStateMixin],
     defaultState: {
-        pivot: '',
         name: '',
         sort: '_id',
         limit: 20,
@@ -45,15 +44,7 @@ var Component = React.createClass({
         return (
             <form onKeyDown={this.onEnterSubmit} onSubmit={this.props.onChange}>
                 <div className="row">
-                    <div className="col-sm-3">
-                        <TextControl
-                            name="pivot"
-                            label="Pivot search"
-                            valueLink={this.linkState('pivot')}
-                            disabled={this.props.loading}
-                        />
-                    </div>
-                    <div className="col-sm-3">
+                  <div className="col-sm-4">
                         <TextControl
                             name="name"
                             label="Name search"
@@ -61,7 +52,7 @@ var Component = React.createClass({
                             disabled={this.props.loading}
                         />
                     </div>
-                    <div className="col-sm-3">
+                  <div className="col-sm-4">
                         <SelectControl
                             name="sort"
                             label="Sort by"
@@ -73,11 +64,9 @@ var Component = React.createClass({
                             <option value="-_id">id &#9660;</option>
                             <option value="name">name &#9650;</option>
                             <option value="-name">name &#9660;</option>
-                            <option value="pivot">pivot &#9650;</option>
-                            <option value="-pivot">pivot &#9660;</option>
                         </SelectControl>
                     </div>
-                    <div className="col-sm-3">
+                  <div className="col-sm-4">
                         <SelectControl
                             name="limit"
                             label="Limit"

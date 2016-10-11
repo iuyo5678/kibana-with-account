@@ -108,6 +108,7 @@ exports.register = function (server, options, next) {
     handler: function (request, reply) {
       var User = request.server.plugins['hapi-mongo-models'].User;
       var UserRequest = request.server.plugins['hapi-mongo-models'].UserRequest;
+      var Session = request.server.plugins['hapi-mongo-models'].Session;
       Async.auto({
         user: function (done) {
           var userFilter = {
@@ -121,6 +122,13 @@ exports.register = function (server, options, next) {
           };
           User.findOneAndUpdate(userFilter, userUpdate, done);
         },
+        clearSession: ['user', function (done, results) {
+          var id = results.user._id.toString();
+          var filter = {
+            userId: id
+          };
+          Session.findOneAndDelete(filter, done);
+        }],
         requestFinish: ['user', function (done, results) {
           var id = request.params.id;
           var update = {

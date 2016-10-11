@@ -116,6 +116,7 @@ Async.auto({
     var AdminGroup = require('../server/account/models/admin-group');
     var UserGroup = require('../server/account/models/user-group');
     var UserRequest = require('../server/account/models/user-request');
+    var Session = require('../server/account/models/session');
 
     Async.auto({
       connect: function (done) {
@@ -129,7 +130,8 @@ Async.auto({
           Admin.deleteMany.bind(Admin, {}),
           AdminGroup.deleteMany.bind(AdminGroup, {}),
           UserGroup.deleteMany.bind(UserGroup, {}),
-          UserRequest.deleteMany.bind(UserRequest, {})
+          UserRequest.deleteMany.bind(UserRequest, {}),
+          Session.deleteMany.bind(Session, {})
         ], done);
       }],
       adminGroupDefault: ['clean', function (done) {

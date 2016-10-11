@@ -1,6 +1,6 @@
 {
-  "name": "pingan-kibana",
-  "description": "pingan-kibana is develop based kibana project",
+  "name": "kibana-with-account",
+  "description": "kibana-with-account is develop based kibana project",
   "keywords": [
     "kibana",
     "elasticsearch",
@@ -10,12 +10,12 @@
     "dashboards",
     "dashboarding"
   ],
-  "private": false,
-  "version": "4.4.2",
   "build": {
     "number": 8467,
     "sha": "6cb7fec4e154faa0a4a3fee4b33dfef91b9870d9"
   },
+  "private": false,
+  "version": "1.0.0",
   "main": "src/server/KbnServer.js",
   "contributors": [
     "Spencer Alger <spencer.alger@elastic.co>",
@@ -31,6 +31,11 @@
     "Tim Sullivan <tim@elastic.co>",
     "Jim Unger <jim.unger@elastic.co>"
   ],
+  "author": {
+    "name": "iuyo5678",
+    "email": "iuyo5678@gmail.cn",
+    "url": "https://www.zghhome.cn"
+  },
   "scripts": {
     "test": "grunt test",
     "test:dev": "grunt test:dev",
@@ -52,8 +57,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/elastic/kibana.git"
+    "url": "https://github.com/iuyo5678/kibana-with-account.git"
   },
+  "license": "Apache-2.0",
   "dependencies": {
     "@bigfunger/decompress-zip": "0.2.0-stripfix2",
     "@spalger/angular-bootstrap": "0.12.1",
@@ -139,6 +145,7 @@
     "nodemailer": "1.11.0",
     "nodemailer-markdown": "1.0.0",
     "object-assign": "3.0.0",
+    "promptly": "0.2.1",
     "qs": "4.0.0",
     "raw-loader": "0.5.1",
     "react": "0.13.3",
@@ -211,7 +218,6 @@
     "nodemon": "1.10.0",
     "npm": "2.11.0",
     "portscanner": "1.0.0",
-    "promptly": "0.2.1",
     "proxyquire": "1.7.10",
     "require-dir": "0.3.0",
     "simple-git": "1.8.0",

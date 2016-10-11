@@ -146,6 +146,5 @@ module.exports = (kbnServer, server, config) => {
       .pipe(gulp.dest(join(config.get('optimize.bundleDir'), bundleConfig.dest)));
   });
 
-
 }
 ;

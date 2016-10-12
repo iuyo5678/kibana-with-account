@@ -1,6 +1,6 @@
 /* global window */
 var Dispatcher = require('flux-dispatcher');
-var Constants = require('../constants/AdminGroup');
+var Constants = require('../constants/AdminRole');
 var fetch = require('../../../helpers/jsonFetch');
 
 
@@ -17,7 +17,7 @@ var Actions = {
 
     var request = {
       method: 'GET',
-      url: '/api/admin-groups',
+      url: '/api/admin-role',
       query: data,
       useAuth: true
     };
@@ -37,7 +37,7 @@ var Actions = {
 
     var request = {
       method: 'GET',
-      url: '/api/admin-groups/' + data.id,
+      url: '/api/admin-role/' + data.id,
       useAuth: true
     };
 
@@ -65,7 +65,7 @@ var Actions = {
 
     var request = {
       method: 'POST',
-      url: '/api/admin-groups',
+      url: '/api/admin-role',
       data: data,
       useAuth: true
     };
@@ -92,7 +92,7 @@ var Actions = {
 
     var request = {
       method: 'PUT',
-      url: '/api/admin-groups/' + id,
+      url: '/api/admin-role/' + id,
       data: data,
       useAuth: true
     };
@@ -115,7 +115,7 @@ var Actions = {
 
     var request = {
       method: 'PUT',
-      url: '/api/admin-groups/' + id + '/permissions',
+      url: '/api/admin-role/' + id + '/permissions',
       data: data,
       useAuth: true
     };
@@ -138,7 +138,7 @@ var Actions = {
 
     var request = {
       method: 'DELETE',
-      url: '/api/admin-groups/' + id,
+      url: '/api/admin-role/' + id,
       data: data,
       useAuth: true
     };
@@ -149,7 +149,7 @@ var Actions = {
         response.success = true;
 
         if (router) {
-          router.transitionTo('adminGroups');
+          router.transitionTo('adminRole');
           window.scrollTo(0, 0);
         }
       }

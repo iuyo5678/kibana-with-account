@@ -95,7 +95,7 @@ Shield provides index-level access control. If a user isn't authorized to run
 the query that populates a Kibana visualization, the user just sees an empty
 visualization.
 
-To configure access to Kibana using Shield, you create Shield roles
+To configure access to Kibana using Shield, you create Shield role
 for Kibana using the `kibana4` default role as a starting point. For more
 information, see {shield}/kibana.html#using-kibana4-with-shield[Using Kibana 4 with Shield].
 

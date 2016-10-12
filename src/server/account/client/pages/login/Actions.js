@@ -50,7 +50,7 @@ var Actions = {
           RedirectActions.clearReturnUrl();
           window.location.href = returnUrl;
         }
-        else if (response.user.roles.admin) {
+        else if (response.user.role.name === 'root') {
 
           window.location.href = '/admin';
         }

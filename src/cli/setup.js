@@ -113,7 +113,7 @@ Async.auto({
     var BaseModel = require('hapi-mongo-models').BaseModel;
     var User = require('../server/account/models/user');
     var Admin = require('../server/account/models/admin');
-    var AdminGroup = require('../server/account/models/admin-group');
+    var AdminRole = require('../server/account/models/admin-role');
     var UserGroup = require('../server/account/models/user-group');
     var UserRequest = require('../server/account/models/user-request');
     var Session = require('../server/account/models/session');
@@ -124,25 +124,22 @@ Async.auto({
         BaseModel.connect({ url: results.mongodbUrl }, done);
       },
       clean: ['connect', function (done) {
-
         Async.parallel([
           User.deleteMany.bind(User, {}),
           Admin.deleteMany.bind(Admin, {}),
-          AdminGroup.deleteMany.bind(AdminGroup, {}),
+          AdminRole.deleteMany.bind(AdminRole, {}),
           UserGroup.deleteMany.bind(UserGroup, {}),
           UserRequest.deleteMany.bind(UserRequest, {}),
           Session.deleteMany.bind(Session, {})
         ], done);
       }],
-      adminGroupDefault: ['clean', function (done) {
-
-        AdminGroup.create('default', done);
+      adminRoleDefault: ['clean', function (done) {
+        AdminRole.create('default', ['account'], done);
       }],
-      adminGroupRoot:['clean', function (done) {
-        AdminGroup.create('root', done);
+      adminRoleRoot: ['clean', function (done) {
+        AdminRole.create('root', ['admin'], done);
       }],
       admin: ['clean', function (done) {
-
         Admin.create('Admin', done);
       }],
       userGroup:['clean', function (done) {
@@ -167,14 +164,14 @@ Async.auto({
 
         Admin.findByIdAndUpdate(id, update, done);
       }],
-      linkUser: ['admin', 'adminGroupRoot', 'user', function (done, dbResults) {
+      linkUser: ['admin', 'adminRoleRoot', 'user', function (done, dbResults) {
 
         var id = dbResults.user._id.toString();
         var update = {
           $set: {
-            'roles.admin': {
-              id: dbResults.adminGroupRoot._id.toString(),
-              name: dbResults.adminGroupRoot.name.toString()
+            'role': {
+              id: dbResults.adminRoleRoot._id.toString(),
+              name: dbResults.adminRoleRoot.name.toString()
             },
             group: 'default'
           }

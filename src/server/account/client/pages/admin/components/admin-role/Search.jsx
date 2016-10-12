@@ -1,8 +1,8 @@
 /* global window */
 var React = require('react/addons');
 var Paging = require('../../../../components/Paging');
-var Actions = require('../../actions/AdminGroup');
-var AdminGroupStore = require('../../stores/AdminGroup');
+var Actions = require('../../actions/AdminRole');
+var AdminRoleStore = require('../../stores/AdminRole');
 var FilterForm = require('./FilterForm');
 var CreateNewForm = require('./CreateNewForm');
 var Results = require('./Results');
@@ -14,14 +14,14 @@ var Component = React.createClass({
   },
   getInitialState: function () {
 
-    AdminGroupStore.resetResults();
-    AdminGroupStore.resetCreateNew();
+    AdminRoleStore.resetResults();
+    AdminRoleStore.resetCreateNew();
 
     Actions.getResults(this.context.router.getCurrentQuery());
 
     return {
-      results: AdminGroupStore.getResults(),
-      createNew: AdminGroupStore.getCreateNew()
+      results: AdminRoleStore.getResults(),
+      createNew: AdminRoleStore.getCreateNew()
     };
   },
   componentWillReceiveProps: function (nextProps) {
@@ -30,17 +30,17 @@ var Component = React.createClass({
   },
   componentDidMount: function () {
 
-    AdminGroupStore.addChangeListener(this.onStoreChange);
+    AdminRoleStore.addChangeListener(this.onStoreChange);
   },
   componentWillUnmount: function () {
 
-    AdminGroupStore.removeChangeListener(this.onStoreChange);
+    AdminRoleStore.removeChangeListener(this.onStoreChange);
   },
   onStoreChange: function () {
 
     this.setState({
-      results: AdminGroupStore.getResults(),
-      createNew: AdminGroupStore.getCreateNew()
+      results: AdminRoleStore.getResults(),
+      createNew: AdminRoleStore.getCreateNew()
     });
   },
   onFiltersChange: function (event) {
@@ -50,7 +50,7 @@ var Component = React.createClass({
       event.stopPropagation();
     }
 
-    this.context.router.transitionTo('adminGroups', {}, this.refs.filters.state);
+    this.context.router.transitionTo('adminRole', {}, this.refs.filters.state);
     window.scrollTo(0, 0);
   },
   onPageChange: function (page) {

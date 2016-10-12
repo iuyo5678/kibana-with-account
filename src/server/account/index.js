@@ -28,7 +28,7 @@ module.exports = (kbnServer, server, config) => {
       mongodb: Config.get('/hapiMongoModels/mongodb'),
       models: {
         Account: resolve(__dirname, './models/account'),
-        AdminGroup: resolve(__dirname, './models/admin-group'),
+        AdminRole: resolve(__dirname, './models/admin-role'),
         Admin: resolve(__dirname, './models/admin'),
         AuthAttempt: resolve(__dirname, './models/auth-attempt'),
         Session: resolve(__dirname, './models/session'),
@@ -42,7 +42,7 @@ module.exports = (kbnServer, server, config) => {
     './auth': {},
     './mailer': {},
     './api/accounts': {basePath: '/api'},
-    './api/admin-groups': {basePath: '/api'},
+    './api/admin-role': {basePath: '/api'},
     './api/user-groups': {basePath: '/api'},
     './api/admins': {basePath: '/api'},
     './api/auth-attempts': {basePath: '/api'},

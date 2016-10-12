@@ -1,7 +1,7 @@
 var Dispatcher = require('flux-dispatcher');
 var FluxStore = require('flux-store');
 var cloneDeep = require('lodash/lang/cloneDeep');
-var Constants = require('../constants/AdminGroup');
+var Constants = require('../constants/AdminRole');
 var parseValidation = require('../../../helpers/parseValidation');
 
 

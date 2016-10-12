@@ -44,7 +44,7 @@ var Store = FluxStore.extend({
       isActive: undefined,
       username: undefined,
       email: undefined,
-      roles: {}
+      role: {}
     },
     password: {
       loading: false,
@@ -192,7 +192,7 @@ var Store = FluxStore.extend({
       this.state.identity.isActive = action.data.isActive;
       this.state.identity.username = action.data.username;
       this.state.identity.email = action.data.email;
-      this.state.identity.roles = action.data.roles;
+      this.state.identity.role = action.data.role;
       this.emitChange();
     }
 

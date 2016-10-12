@@ -132,8 +132,8 @@ var Component = React.createClass({
         </div>;
       }
 
-      var adminGroups = this.props.list.data;
-      var groupOptions = adminGroups.map(function (group) {
+      var adminRole = this.props.list.data;
+      var groupOptions = adminRole.map(function (group) {
 
         return (
           <option key={group._id} value={group._id}>

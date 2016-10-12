@@ -3,7 +3,7 @@ var Async = require('async');
 var Bcrypt = require('bcrypt');
 var objectAssign = require('object-assign');
 var BaseModel = require('hapi-mongo-models').BaseModel;
-var AdminGroup = require('./admin-group');
+var AdminRole = require('./admin-role');
 var Admin = require('./admin');
 
 
@@ -12,46 +12,40 @@ var User = BaseModel.extend({
 
     objectAssign(this, attrs);
 
-    Object.defineProperty(this, '_roles', {
+    Object.defineProperty(this, '_role', {
       writable: true,
       enumerable: false
     });
   },
   canPlayRole: function (role) {
 
-    if (!this.roles) {
+    if (!this.role) {
       return false;
     }
 
-    return this.roles.hasOwnProperty(role);
+    return this.role.hasOwnProperty(role);
   },
-  hydrateRoles: function (callback) {
+  hydrateRole: function (callback) {
 
-    if (!this.roles) {
-      this._roles = {};
-      return callback(null, this._roles);
+    if (!this.role) {
+      this._role = {};
+      return callback(null, this._role);
     }
 
-    if (this._roles) {
-      return callback(null, this._roles);
+    if (this._role) {
+      return callback(null, this._role);
     }
 
     var self = this;
     var tasks = {};
 
-    if (this.roles.account) {
-      tasks.account = function (done) {
+    tasks.role = function (done) {
 
-        AdminGroup.findById(self.roles.account.id, done);
-      };
-    }
+      AdminRole.findById(self.role.id, done);
+    };
 
-    if (this.roles.admin) {
-      tasks.admin = function (done) {
 
-        AdminGroup.findById(self.roles.admin.id, done);
-      };
-    }
+
 
     Async.auto(tasks, function (err, results) {
 
@@ -59,9 +53,9 @@ var User = BaseModel.extend({
         return callback(err);
       }
 
-      self._roles = results;
+      self._role = results.role;
 
-      callback(null, self._roles);
+      callback(null, self._role);
     });
   }
 });
@@ -76,15 +70,9 @@ User.schema = Joi.object().keys({
   username: Joi.string().token().lowercase().required(),
   email: Joi.string().email().lowercase().required(),
   password: Joi.string(),
-  roles: Joi.object().keys({
-    admin: Joi.object().keys({
-      id: Joi.string().required(),
-      name: Joi.string().required()
-    }),
-    account: Joi.object().keys({
-      id: Joi.string().required(),
-      name: Joi.string().required()
-    })
+  role: Joi.object().keys({
+    id: Joi.string().required(),
+    name: Joi.string().required()
   }),
   group: Joi.string().required(),
   resetPassword: Joi.object().keys({

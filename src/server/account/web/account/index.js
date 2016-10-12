@@ -9,7 +9,7 @@ exports.register = function (plugin, options, next) {
       }
     },
     handler: function (request, reply) {
-      if (request.auth.credentials.user.roles.admin) {
+      if (request.auth.credentials.role.name === 'root') {
         return reply.redirect('/admin');
       }
 

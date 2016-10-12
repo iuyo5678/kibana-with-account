@@ -2,7 +2,7 @@ var Joi = require('joi');
 var Async = require('async');
 var objectAssign = require('object-assign');
 var BaseModel = require('hapi-mongo-models').BaseModel;
-var AdminGroup = require('./admin-group');
+var AdminRole = require('./admin-role');
 var Slug = require('slug');
 
 var Admin = BaseModel.extend({
@@ -41,7 +41,7 @@ var Admin = BaseModel.extend({
 
       tasks[group] = function (done) {
 
-        AdminGroup.findById(group, done);
+        AdminRole.findById(group, done);
       };
     });
 

@@ -6,23 +6,23 @@ describe('_.organize', function () {
     var col = [
       {
         name: 'one',
-        roles: ['user', 'admin', 'owner']
+        role: ['user', 'admin', 'owner']
       },
       {
         name: 'two',
-        roles: ['user']
+        role: ['user']
       },
       {
         name: 'three',
-        roles: ['user']
+        role: ['user']
       },
       {
         name: 'four',
-        roles: ['user', 'admin']
+        role: ['user', 'admin']
       }
     ];
 
-    var resp = _.organizeBy(col, 'roles');
+    var resp = _.organizeBy(col, 'role');
     expect(resp).to.have.property('user');
     expect(resp.user).to.have.length(4);
 

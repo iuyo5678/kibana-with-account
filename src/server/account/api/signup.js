@@ -87,7 +87,7 @@ exports.register = function (server, options, next) {
 
       var User = request.server.plugins['hapi-mongo-models'].User;
       var UserGroup = request.server.plugins['hapi-mongo-models'].UserGroup;
-      var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
+      var AdminRole = request.server.plugins['hapi-mongo-models'].AdminRole;
       var Session = request.server.plugins['hapi-mongo-models'].Session;
       var mailer = request.server.plugins.mailer;
 
@@ -100,20 +100,18 @@ exports.register = function (server, options, next) {
 
           User.create(username, password, email, done);
         },
-        adminGroup: ['user', function (done, results) {
-          AdminGroup.findByUsername('default', done);
+        adminRole: ['user', function (done, results) {
+          AdminRole.findByUsername('default', done);
         }],
 
-        linkAccount: ['adminGroup', function (done, results) {
+        linkAccount: ['adminRole', function (done, results) {
 
           var id = results.user._id.toString();
           var update = {
             $set: {
-              roles: {
-                account: {
-                  id: results.adminGroup._id.toString(),
-                  name: results.adminGroup.name
-                }
+              role: {
+                id: results.adminRole._id.toString(),
+                name: results.adminRole.name
               },
               group: 'default'
             }
@@ -163,7 +161,7 @@ exports.register = function (server, options, next) {
             _id: user._id,
             username: user.username,
             email: user.email,
-            roles: user.roles,
+            role: user.role,
             index: group.index
           },
           session: results.session,

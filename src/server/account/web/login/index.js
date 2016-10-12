@@ -19,7 +19,7 @@ exports.register = function (plugin, options, next) {
       if (request.params.glob !== 'logout' &&
         request.auth.isAuthenticated) {
 
-        if (request.auth.credentials.user.roles.admin) {
+        if (request.auth.credentials.role.name === 'root') {
           return reply.redirect('/admin');
         }
 

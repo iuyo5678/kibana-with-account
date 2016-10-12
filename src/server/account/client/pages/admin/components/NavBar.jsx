@@ -65,8 +65,8 @@ var Component = React.createClass({
               <li className={this.isNavActive(['admins', 'adminDetails'])}>
                 <Link to="admins">Admins</Link>
               </li>
-              <li className={this.isNavActive(['adminGroups', 'adminGroupDetails'])}>
-                <Link to="adminGroups">Admin Groups</Link>
+              <li className={this.isNavActive(['adminRole', 'adminRoleDetails'])}>
+                <Link to="adminRole">Admin Role</Link>
               </li>
               <li className={this.isNavActive(['userRequest', 'userRequestDetails'])}>
                 <Link to="userRequest">UserRequest</Link>

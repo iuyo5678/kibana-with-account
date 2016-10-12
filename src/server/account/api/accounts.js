@@ -92,7 +92,7 @@ exports.register = function (server, options, next) {
     handler: function (request, reply) {
 
       var Account = request.server.plugins['hapi-mongo-models'].Account;
-      var id = request.auth.credentials.roles.account._id.toString();
+      var id = request.auth.credentials.role._id.toString();
       var fields = Account.fieldsAdapter('user name timeCreated');
 
       Account.findById(id, fields, function (err, account) {
@@ -207,7 +207,7 @@ exports.register = function (server, options, next) {
     handler: function (request, reply) {
 
       var Account = request.server.plugins['hapi-mongo-models'].Account;
-      var id = request.auth.credentials.roles.account._id.toString();
+      var id = request.auth.credentials.role._id.toString();
       var update = {
         $set: {
           name: {
@@ -281,9 +281,9 @@ exports.register = function (server, options, next) {
               return reply({message: 'User document not found.'}).takeover().code(404);
             }
 
-            if (user.roles &&
-              user.roles.account &&
-              user.roles.account.id !== request.params.id) {
+            if (user.role &&
+              user.role.account &&
+              user.role.account.id !== request.params.id) {
 
               var response = {
                 message: 'User is already linked to another account. Unlink first.'
@@ -337,7 +337,7 @@ exports.register = function (server, options, next) {
           var id = request.pre.user._id;
           var update = {
             $set: {
-              'roles.account': {
+              'role': {
                 id: request.pre.account._id.toString(),
                 name: request.pre.account.name.first + ' ' + request.pre.account.name.last
               }
@@ -431,7 +431,7 @@ exports.register = function (server, options, next) {
           var id = request.pre.user._id.toString();
           var update = {
             $unset: {
-              'roles.account': undefined
+              'role': undefined
             }
           };
 

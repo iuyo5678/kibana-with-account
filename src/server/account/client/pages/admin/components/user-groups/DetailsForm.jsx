@@ -1,6 +1,6 @@
 var React = require('react/addons');
 var TextControl = require('../../../../components/form/TextControl');
-var Actions = require('../../actions/AdminGroup');
+var Actions = require('../../actions/AdminRole');
 
 
 var Component = React.createClass({

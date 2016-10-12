@@ -43,7 +43,7 @@ exports.register = function (server, options, next) {
         query.isActive = request.query.isActive === 'true';
       }
       if (request.query.role) {
-        query['roles.' + request.query.role] = {$exists: true};
+        query['role.' + request.query.role] = {$exists: true};
       }
       var fields = request.query.fields;
       var sort = request.query.sort;
@@ -107,7 +107,7 @@ exports.register = function (server, options, next) {
 
       var User = request.server.plugins['hapi-mongo-models'].User;
       var id = request.auth.credentials.user._id.toString();
-      var fields = User.fieldsAdapter('username email group roles');
+      var fields = User.fieldsAdapter('username email group role');
 
       User.findById(id, fields, function (err, user) {
 
@@ -539,7 +539,7 @@ exports.register = function (server, options, next) {
         }
       };
       var findOptions = {
-        fields: User.fieldsAdapter('username email roles')
+        fields: User.fieldsAdapter('username email role')
       };
 
       User.findByIdAndUpdate(id, update, findOptions, function (err, user) {

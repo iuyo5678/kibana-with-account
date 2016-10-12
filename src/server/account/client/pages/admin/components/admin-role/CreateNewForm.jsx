@@ -4,7 +4,7 @@ var ControlGroup = require('../../../../components/form/ControlGroup');
 var TextControl = require('../../../../components/form/TextControl');
 var Button = require('../../../../components/form/Button');
 var Spinner = require('../../../../components/form/Spinner');
-var Actions = require('../../actions/AdminGroup');
+var Actions = require('../../actions/AdminRole');
 
 
 var LinkedState = React.addons.LinkedStateMixin;

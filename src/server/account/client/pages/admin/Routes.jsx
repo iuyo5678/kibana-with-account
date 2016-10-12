@@ -5,8 +5,8 @@ var Home = require('./components/home/Controller');
 var NotFound = require('./components/not-found/Controller');
 var AdminSearch = require('./components/admins/Search');
 var AdminDetails = require('./components/admins/Details');
-var AdminGroupSearch = require('./components/admin-groups/Search');
-var AdminGroupDetails = require('./components/admin-groups/Details');
+var AdminRoleSearch = require('./components/admin-role/Search');
+var AdminRoleDetails = require('./components/admin-role/Details');
 var UserRequestSearch = require('./components/user-request/Search');
 var UserRequestDetails = require('./components/user-request/Details');
 var UserSearch = require('./components/users/Search');
@@ -26,8 +26,8 @@ var routes = (
 
     <Route path="admins" name="admins" handler={AdminSearch}/>
     <Route path="admins/:id" name="adminDetails" handler={AdminDetails}/>
-    <Route path="admin-groups" name="adminGroups" handler={AdminGroupSearch}/>
-    <Route path="admin-groups/:id" name="adminGroupDetails" handler={AdminGroupDetails}/>
+    <Route path="admin-role" name="adminRole" handler={AdminRoleSearch}/>
+    <Route path="admin-role/:id" name="adminRoleDetails" handler={AdminRoleDetails}/>
     <Route path="user-request" name="userRequest" handler={UserRequestSearch}/>
     <Route path="user-request/:id" name="userRequestDetails" handler={UserRequestDetails}/>
     <Route path="users" name="users" handler={UserSearch}/>

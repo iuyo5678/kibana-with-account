@@ -4,7 +4,7 @@ var BaseModel = require('hapi-mongo-models').BaseModel;
 var Slug = require('slug');
 
 
-var AdminGroup = BaseModel.extend({
+var AdminRole = BaseModel.extend({
   constructor: function (attrs) {
 
     objectAssign(this, attrs);
@@ -20,23 +20,25 @@ var AdminGroup = BaseModel.extend({
 });
 
 
-AdminGroup._collection = 'adminGroups';
+AdminRole._collection = 'adminRole';
 
 
-AdminGroup.schema = Joi.object().keys({
+AdminRole.schema = Joi.object().keys({
   _id: Joi.string(),
   name: Joi.string().required(),
-  permissions: Joi.object().description('{ permission: boolean, ... }')
+  permissions: Joi.object().description('{ permission: boolean, ... }'),
+  scope: Joi.array().unique().required()
 });
 
-AdminGroup.indexes = [
+AdminRole.indexes = [
   [{'name': 1}]
 ];
 
-AdminGroup.create = function (name, callback) {
+AdminRole.create = function (name, scope, callback) {
 
   var document = {
-    name: name
+    name: name,
+    scope: scope
   };
 
   this.insertOne(document, function (err, docs) {
@@ -49,10 +51,10 @@ AdminGroup.create = function (name, callback) {
   });
 };
 
-AdminGroup.findByUsername = function (name, callback) {
+AdminRole.findByUsername = function (name, callback) {
 
   var query = {'name': name.toLowerCase()};
   this.findOne(query, callback);
 };
 
-module.exports = AdminGroup;
+module.exports = AdminRole;

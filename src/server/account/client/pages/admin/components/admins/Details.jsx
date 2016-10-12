@@ -6,9 +6,9 @@ var GroupsForm = require('./GroupsForm');
 var PermissionsForm = require('./PermissionsForm');
 var DeleteForm = require('./DeleteForm');
 var AdminStore = require('../../stores/Admin');
-var AdminGroupStore = require('../../stores/AdminGroup');
+var AdminRoleStore = require('../../stores/AdminRole');
 var Actions = require('../../actions/Admin');
-var GroupActions = require('../../actions/AdminGroup');
+var GroupActions = require('../../actions/AdminRole');
 
 
 var LinkedState = React.addons.LinkedStateMixin;
@@ -27,7 +27,7 @@ var Component = React.createClass({
     AdminStore.resetUser();
     AdminStore.resetGroups();
     AdminStore.resetDelete();
-    AdminGroupStore.resetResults();
+    AdminRoleStore.resetResults();
 
     Actions.getDetails(this.context.router.getCurrentParams());
     GroupActions.getResults({fields: 'name', limit: 99});
@@ -38,18 +38,18 @@ var Component = React.createClass({
       user: AdminStore.getUser(),
       groups: AdminStore.getGroups(),
       delete: AdminStore.getDelete(),
-      adminGroups: AdminGroupStore.getResults()
+      adminRole: AdminRoleStore.getResults()
     };
   },
   componentDidMount: function () {
 
     AdminStore.addChangeListener(this.onStoreChange);
-    AdminGroupStore.addChangeListener(this.onStoreChange);
+    AdminRoleStore.addChangeListener(this.onStoreChange);
   },
   componentWillUnmount: function () {
 
     AdminStore.removeChangeListener(this.onStoreChange);
-    AdminGroupStore.removeChangeListener(this.onStoreChange);
+    AdminRoleStore.removeChangeListener(this.onStoreChange);
   },
   onStoreChange: function () {
 
@@ -58,7 +58,7 @@ var Component = React.createClass({
       groups: AdminStore.getGroups(),
       permissions: AdminStore.getPermissions(),
       delete: AdminStore.getDelete(),
-      adminGroups: AdminGroupStore.getResults()
+      adminRole: AdminRoleStore.getResults()
     });
   },
   render: function () {
@@ -90,7 +90,7 @@ var Component = React.createClass({
             <GroupsForm
               details={this.state.details}
               data={this.state.groups}
-              list={this.state.adminGroups}
+              list={this.state.adminRole}
             />
             <PermissionsForm
               details={this.state.details}

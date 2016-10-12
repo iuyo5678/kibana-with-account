@@ -20,23 +20,23 @@ var Component = React.createClass({
 
     var formElements;
     if (this.props.data.hydrated) {
-      var roles = this.props.data.roles || {};
-      var rolesUi = [];
+      var role = this.props.data.role || {};
+      var roleUi = [];
 
-      if (roles.account) {
-        rolesUi.push(
+      if (role.account) {
+        roleUi.push(
           <ControlGroup key="account" label="Account" hideHelp={true}>
             <div className="input-group">
               <input
                 type="text"
                 className="form-control"
                 disabled={true}
-                value={roles.account.name}
+                value={role.account.name}
               />
               <span className="input-group-btn">
                                 <Link
-                                  to="accountDetails"
-                                  params={{id: roles.account.id}}
+                                  to="adminRoleDetails"
+                                  params={{id: role.account.id}}
                                   className="btn btn-default">
 
                                     View
@@ -47,20 +47,20 @@ var Component = React.createClass({
         );
       }
 
-      if (roles.admin) {
-        rolesUi.push(
+      if (role.admin) {
+        roleUi.push(
           <ControlGroup key="admin" label="Admin" hideHelp={true}>
             <div className="input-group">
               <input
                 type="text"
                 className="form-control"
                 disabled={true}
-                value={roles.admin.name}
+                value={role.admin.name}
               />
               <span className="input-group-btn">
                                 <Link
                                   to="adminDetails"
-                                  params={{id: roles.admin.id}}
+                                  params={{id: role.admin.id}}
                                   className="btn btn-default">
 
                                     View
@@ -71,19 +71,19 @@ var Component = React.createClass({
         );
       }
 
-      if (rolesUi.length === 0) {
-        rolesUi.push(
+      if (roleUi.length === 0) {
+        roleUi.push(
           <ControlGroup key="empty" hideLabel={true} hideHelp={true}>
                         <span className="label label-default">
-                            no roles defined
+                            no role defined
                         </span>
           </ControlGroup>
         );
       }
 
       formElements = <fieldset>
-        <legend>Roles</legend>
-        {rolesUi}
+        <legend>Admin Role</legend>
+        {roleUi}
       </fieldset>;
     }
 

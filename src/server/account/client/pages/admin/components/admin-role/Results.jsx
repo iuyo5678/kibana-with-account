@@ -23,7 +23,7 @@ var Component = React.createClass({
           <td>
             <Link
               className="btn btn-default btn-sm"
-              to="adminGroupDetails"
+              to="adminRoleDetails"
               params={{id: record._id}}>
 
               Edit

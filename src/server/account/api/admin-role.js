@@ -10,7 +10,7 @@ exports.register = function (server, options, next) {
 
   server.route({
     method: 'GET',
-    path: options.basePath + '/admin-groups',
+    path: options.basePath + '/admin-role',
     config: {
       auth: {
         strategy: 'session',
@@ -31,7 +31,7 @@ exports.register = function (server, options, next) {
     },
     handler: function (request, reply) {
 
-      var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
+      var AdminRole = request.server.plugins['hapi-mongo-models'].AdminRole;
       var query = {};
       if (request.query.name) {
         query.name = new RegExp('^.*?' + request.query.name + '.*$', 'i');
@@ -41,7 +41,7 @@ exports.register = function (server, options, next) {
       var limit = request.query.limit;
       var page = request.query.page;
 
-      AdminGroup.pagedFind(query, fields, sort, limit, page, function (err, results) {
+      AdminRole.pagedFind(query, fields, sort, limit, page, function (err, results) {
 
         if (err) {
           return reply(err);
@@ -55,7 +55,7 @@ exports.register = function (server, options, next) {
 
   server.route({
     method: 'GET',
-    path: options.basePath + '/admin-groups/{id}',
+    path: options.basePath + '/admin-role/{id}',
     config: {
       auth: {
         strategy: 'session',
@@ -67,19 +67,19 @@ exports.register = function (server, options, next) {
     },
     handler: function (request, reply) {
 
-      var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
+      var AdminRole = request.server.plugins['hapi-mongo-models'].AdminRole;
 
-      AdminGroup.findById(request.params.id, function (err, adminGroup) {
+      AdminRole.findById(request.params.id, function (err, adminRole) {
 
         if (err) {
           return reply(err);
         }
 
-        if (!adminGroup) {
+        if (!adminRole) {
           return reply({message: 'Document not found.'}).code(404);
         }
 
-        reply(adminGroup);
+        reply(adminRole);
       });
     }
   });
@@ -87,7 +87,7 @@ exports.register = function (server, options, next) {
 
   server.route({
     method: 'POST',
-    path: options.basePath + '/admin-groups',
+    path: options.basePath + '/admin-role',
     config: {
       auth: {
         strategy: 'session',
@@ -104,16 +104,16 @@ exports.register = function (server, options, next) {
     },
     handler: function (request, reply) {
 
-      var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
+      var AdminRole = request.server.plugins['hapi-mongo-models'].AdminRole;
       var name = request.payload.name;
 
-      AdminGroup.create(name, function (err, adminGroup) {
+      AdminRole.create(name, function (err, adminRole) {
 
         if (err) {
           return reply(err);
         }
 
-        reply(adminGroup);
+        reply(adminRole);
       });
     }
   });
@@ -121,7 +121,7 @@ exports.register = function (server, options, next) {
 
   server.route({
     method: 'PUT',
-    path: options.basePath + '/admin-groups/{id}',
+    path: options.basePath + '/admin-role/{id}',
     config: {
       auth: {
         strategy: 'session',
@@ -138,7 +138,7 @@ exports.register = function (server, options, next) {
     },
     handler: function (request, reply) {
 
-      var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
+      var AdminRole = request.server.plugins['hapi-mongo-models'].AdminRole;
       var id = request.params.id;
       var update = {
         $set: {
@@ -146,17 +146,17 @@ exports.register = function (server, options, next) {
         }
       };
 
-      AdminGroup.findByIdAndUpdate(id, update, function (err, adminGroup) {
+      AdminRole.findByIdAndUpdate(id, update, function (err, adminRole) {
 
         if (err) {
           return reply(err);
         }
 
-        if (!adminGroup) {
+        if (!adminRole) {
           return reply({message: 'Document not found.'}).code(404);
         }
 
-        reply(adminGroup);
+        reply(adminRole);
       });
     }
   });
@@ -164,7 +164,7 @@ exports.register = function (server, options, next) {
 
   server.route({
     method: 'PUT',
-    path: options.basePath + '/admin-groups/{id}/permissions',
+    path: options.basePath + '/admin-role/{id}/permissions',
     config: {
       auth: {
         strategy: 'session',
@@ -181,7 +181,7 @@ exports.register = function (server, options, next) {
     },
     handler: function (request, reply) {
 
-      var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
+      var AdminRole = request.server.plugins['hapi-mongo-models'].AdminRole;
       var id = request.params.id;
       var update = {
         $set: {
@@ -189,13 +189,13 @@ exports.register = function (server, options, next) {
         }
       };
 
-      AdminGroup.findByIdAndUpdate(id, update, function (err, adminGroup) {
+      AdminRole.findByIdAndUpdate(id, update, function (err, adminRole) {
 
         if (err) {
           return reply(err);
         }
 
-        reply(adminGroup);
+        reply(adminRole);
       });
     }
   });
@@ -203,7 +203,7 @@ exports.register = function (server, options, next) {
 
   server.route({
     method: 'DELETE',
-    path: options.basePath + '/admin-groups/{id}',
+    path: options.basePath + '/admin-role/{id}',
     config: {
       auth: {
         strategy: 'session',
@@ -215,15 +215,15 @@ exports.register = function (server, options, next) {
     },
     handler: function (request, reply) {
 
-      var AdminGroup = request.server.plugins['hapi-mongo-models'].AdminGroup;
+      var AdminRole = request.server.plugins['hapi-mongo-models'].AdminRole;
 
-      AdminGroup.findByIdAndDelete(request.params.id, function (err, adminGroup) {
+      AdminRole.findByIdAndDelete(request.params.id, function (err, adminRole) {
 
         if (err) {
           return reply(err);
         }
 
-        if (!adminGroup) {
+        if (!adminRole) {
           return reply({message: 'Document not found.'}).code(404);
         }
 
@@ -238,5 +238,5 @@ exports.register = function (server, options, next) {
 
 
 exports.register.attributes = {
-  name: 'admin-groups'
+  name: 'admin-role'
 };

@@ -128,7 +128,7 @@ exports.register = function (server, options, next) {
           _id: request.pre.user._id,
           username: request.pre.user.username,
           email: request.pre.user.email,
-          roles: request.pre.user.roles,
+          role: request.pre.user.role,
           index: request.pre.user.index
         },
         session: request.pre.session,

@@ -30,21 +30,21 @@ exports.register = function (server, options, next) {
 
           User.findById(results.session.userId, done);
         }],
-        roles: ['user', function (done, results) {
+        role: ['user', function (done, results) {
 
           if (!results.user) {
             return done();
           }
 
-          results.user.hydrateRoles(done);
+          results.user.hydrateRole(done);
         }],
-        scope: ['user', function (done, results) {
+        scope: ['role', function (done, results) {
 
-          if (!results.user || !results.user.roles) {
+          if (!results.role || !results.role.scope) {
             return done();
           }
 
-          done(null, Object.keys(results.user.roles));
+          done(null, results.role.scope);
         }]
       }, function (err, results) {
 
@@ -79,8 +79,8 @@ exports.preware.ensureAdminGroup = function (groups) {
       }
 
       var groupFound = groups.some(function (group) {
-        if (request.auth.credentials.roles.admin) {
-          return request.auth.credentials.roles.admin.name === group;
+        if (request.auth.credentials.role.name) {
+          return request.auth.credentials.role.name === group;
         }
 
       });

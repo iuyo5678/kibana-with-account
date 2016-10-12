@@ -297,9 +297,9 @@ exports.register = function (server, options, next) {
                 return reply({message: 'User document not found.'}).takeover().code(404);
               }
 
-              if (user.roles &&
-                user.roles.admin &&
-                user.roles.admin.id !== request.params.id) {
+              if (user.role &&
+                user.role.admin &&
+                user.role.admin.id !== request.params.id) {
 
                 var response = {
                   message: 'User is already linked to another admin. Unlink first.'
@@ -354,7 +354,7 @@ exports.register = function (server, options, next) {
           var id = request.pre.user._id;
           var update = {
             $set: {
-              'roles.admin': {
+              'role': {
                 id: request.pre.admin._id.toString(),
                 name: request.pre.admin.name.first + ' ' + request.pre.admin.name.last
               }
@@ -451,7 +451,7 @@ exports.register = function (server, options, next) {
           var id = request.pre.user._id.toString();
           var update = {
             $unset: {
-              'roles.admin': undefined
+              'role.admin': undefined
             }
           };
 

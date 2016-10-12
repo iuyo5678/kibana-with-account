@@ -7,6 +7,8 @@ module.exports = {
   ActionTypes: FluxConstant.set([
     'GET_RESULTS',
     'GET_RESULTS_RESPONSE',
+    'GET_GROUPS_ALL',
+    'GET_GROUPS_ALL_RESPONSE',
     'GET_IDENTITY',
     'GET_IDENTITY_RESPONSE',
     'SHOW_CREATE_NEW',

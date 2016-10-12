@@ -22,11 +22,13 @@ var Component = React.createClass({
     UserStore.resetIdentity();
     UserStore.resetPassword();
     UserStore.resetDelete();
+    UserStore.resetUserGroups();
 
     Actions.getIdentity(this.context.router.getCurrentParams());
 
     return {
       identity: UserStore.getIdentity(),
+      userGroups: UserStore.getUserGroups(),
       password: UserStore.getPassword(),
       delete: UserStore.getDelete()
     };
@@ -43,6 +45,7 @@ var Component = React.createClass({
 
     this.setState({
       identity: UserStore.getIdentity(),
+      userGroups: UserStore.getUserGroups(),
       password: UserStore.getPassword(),
       delete: UserStore.getDelete()
     });
@@ -70,7 +73,10 @@ var Component = React.createClass({
         <div className="row">
           <div className="col-sm-6">
             <IdentityForm data={this.state.identity}/>
-            <RolesForm data={this.state.identity}/>
+            <RolesForm
+              data={this.state.identity}
+              userGroup={this.state.userGroup}
+            />
             <PasswordForm
               data={this.state.password}
               identity={this.state.identity}

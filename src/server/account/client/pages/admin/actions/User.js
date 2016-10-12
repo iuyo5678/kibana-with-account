@@ -31,6 +31,24 @@ var Actions = {
       dispatch(SERVER_ACTION, Types.GET_RESULTS_RESPONSE, response);
     });
   },
+  getUserGroups: function (data) {
+    dispatch(VIEW_ACTION, Types.GET_GROUPS_ALL, data);
+
+    var request = {
+      method: 'GET',
+      url: '/api/user-groups',
+      query: data,
+      useAuth: true
+    };
+
+    fetch(request, function (err, response) {
+      if (!err) {
+        response.success = true;
+      }
+
+      dispatch(SERVER_ACTION, Types.GET_GROUPS_ALL_RESPONSE, response);
+    });
+  },
   getIdentity: function (data) {
 
     dispatch(VIEW_ACTION, Types.GET_IDENTITY, data);

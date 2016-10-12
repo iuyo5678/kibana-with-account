@@ -22,54 +22,28 @@ var Component = React.createClass({
     if (this.props.data.hydrated) {
       var role = this.props.data.role || {};
       var roleUi = [];
-
-      if (role.account) {
-        roleUi.push(
-          <ControlGroup key="account" label="Account" hideHelp={true}>
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control"
-                disabled={true}
-                value={role.account.name}
-              />
+      roleUi.push(
+        <ControlGroup key="account" label="Admin Roles" hideHelp={true}>
+          <div className="input-group">
+            <input
+              type="text"
+              className="form-control"
+              disabled={true}
+              value={role.name}
+            />
               <span className="input-group-btn">
                                 <Link
                                   to="adminRoleDetails"
-                                  params={{id: role.account.id}}
+                                  params={{id: role.id}}
                                   className="btn btn-default">
-
-                                    View
+                                  View
                                 </Link>
                             </span>
-            </div>
-          </ControlGroup>
-        );
-      }
+          </div>
+        </ControlGroup>
+      );
 
-      if (role.admin) {
-        roleUi.push(
-          <ControlGroup key="admin" label="Admin" hideHelp={true}>
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control"
-                disabled={true}
-                value={role.admin.name}
-              />
-              <span className="input-group-btn">
-                                <Link
-                                  to="adminDetails"
-                                  params={{id: role.admin.id}}
-                                  className="btn btn-default">
 
-                                    View
-                                </Link>
-                            </span>
-            </div>
-          </ControlGroup>
-        );
-      }
 
       if (roleUi.length === 0) {
         roleUi.push(
@@ -82,7 +56,7 @@ var Component = React.createClass({
       }
 
       formElements = <fieldset>
-        <legend>Admin Role</legend>
+        <legend>User Role</legend>
         {roleUi}
       </fieldset>;
     }

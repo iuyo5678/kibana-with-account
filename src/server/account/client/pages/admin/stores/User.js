@@ -21,6 +21,15 @@ var Store = FluxStore.extend({
       pages: {},
       items: {}
     },
+    userGroups: {
+      hydrated: false,
+      loading: false,
+      success: false,
+      error: undefined,
+      data: [],
+      pages: {},
+      items: {}
+    },
     createNew: {
       show: false,
       loading: false,
@@ -66,6 +75,9 @@ var Store = FluxStore.extend({
 
     return this.state.results;
   },
+  getUserGroups: function () {
+    return this.state.userGroups;
+  },
   getCreateNew: function () {
 
     return this.state.createNew;
@@ -86,6 +98,7 @@ var Store = FluxStore.extend({
 
     this.state = {
       results: cloneDeep(this.defaultState.results),
+      userGroups: cloneDeep(this.defaultState.userGroups),
       createNew: cloneDeep(this.defaultState.createNew),
       identity: cloneDeep(this.defaultState.identity),
       password: cloneDeep(this.defaultState.password),
@@ -95,6 +108,9 @@ var Store = FluxStore.extend({
   resetResults: function () {
 
     this.state.results = cloneDeep(this.defaultState.results);
+  },
+  resetUserGroups: function () {
+    this.state.userGroups = cloneDeep(this.defaultState.userGroups);
   },
   resetCreateNew: function () {
 
@@ -143,6 +159,22 @@ var Store = FluxStore.extend({
       this.emitChange();
     }
 
+    if (ActionTypes.GET_GROUPS_ALL === action.type) {
+      this.state.userGroups.loading = true;
+      this.state.userGroups.hydrated = false;
+      this.state.userGroups.success = false;
+      this.emitChange();
+    }
+
+    if (ActionTypes.GET_GROUPS_ALL_RESPONSE === action.type) {
+      this.state.userGroups.loading = false;
+      this.state.userGroups.hydrated = true;
+      this.state.userGroups.success = action.data.success;
+      this.state.userGroups.data = action.data.data;
+      this.state.userGroups.pages = action.data.pages;
+      this.state.userGroups.items = action.data.items;
+      this.emitChange();
+    }
     if (ActionTypes.HIDE_CREATE_NEW === action.type) {
       this.state.createNew.show = false;
       this.emitChange();

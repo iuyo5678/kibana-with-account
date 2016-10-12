@@ -62,67 +62,6 @@ var Component = React.createClass({
 
     var formElements;
     if (this.props.data.hydrated) {
-      var role = this.props.data.role || {};
-      var roleUi = [];
-
-      if (role.account) {
-        roleUi.push(
-          <ControlGroup key="account" label="Admin Roles" hideHelp={true}>
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control"
-                disabled={true}
-                value={role.account.name}
-              />
-              <span className="input-group-btn">
-                                <Link
-                                  to="adminRoleDetails"
-                                  params={{id: role.account.id}}
-                                  className="btn btn-default">
-
-                                    View
-                                </Link>
-                            </span>
-            </div>
-          </ControlGroup>
-        );
-      }
-
-      if (role.admin) {
-        roleUi.push(
-          <ControlGroup key="admin" label="Admin Roles" hideHelp={true}>
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control"
-                disabled={true}
-                value={role.admin.name}
-              />
-              <span className="input-group-btn">
-                                <Link
-                                  to="adminDetails"
-                                  params={{id: role.admin.id}}
-                                  className="btn btn-default">
-
-                                    View
-                                </Link>
-                            </span>
-            </div>
-          </ControlGroup>
-        );
-      }
-
-      if (roleUi.length === 0) {
-        roleUi.push(
-          <ControlGroup key="empty" hideLabel={true} hideHelp={true}>
-                        <span className="label label-default">
-                            no role defined
-                        </span>
-          </ControlGroup>
-        );
-      }
-
       formElements = <fieldset>
         <legend>Identity</legend>
         {alerts}
@@ -151,7 +90,6 @@ var Component = React.createClass({
           help={this.props.data.help.email}
           disabled={this.props.data.loading}
         />
-        {roleUi}
         <ControlGroup hideLabel={true} hideHelp={true}>
           <Button
             type="submit"

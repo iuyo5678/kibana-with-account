@@ -90,6 +90,7 @@ var Actions = {
       dispatch(SERVER_ACTION, Types.GET_IDENTITY_RESPONSE, response);
     });
   },
+
   showCreateNew: function (data) {
 
     dispatch(VIEW_ACTION, Types.SHOW_CREATE_NEW, data);

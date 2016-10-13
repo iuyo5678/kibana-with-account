@@ -61,12 +61,11 @@ var Component = React.createClass({
     });
   },
   render: function () {
-
     var alerts = [];
     var error = this.state.error || this.props.data.error || this.props.userGroup.error;
     if (this.props.userGroup.response) {
       alerts.push(<div key="success" className="alert alert-success">
-        您的请求已经成功提交.
+        您的请求已经成功提交, 页面即将刷新....
       </div>);
     }
     else if (error) {

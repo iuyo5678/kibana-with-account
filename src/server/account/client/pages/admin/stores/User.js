@@ -186,13 +186,14 @@ var Store = FluxStore.extend({
         this.state.userGroups.error = action.data.error;
         setTimeout(function () {
           this.state.userGroups.error = undefined;
-          self.emitChange();
+          this.emitChange();
         }.bind(this), 1000);
       } else {
         this.state.userGroups.response = true;
         setTimeout(function () {
           this.state.userGroups.response = false;
-          self.emitChange();
+          window.location.reload();
+          this.emitChange();
         }.bind(this), 1000);
       }
       this.emitChange();

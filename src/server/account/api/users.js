@@ -696,6 +696,85 @@ exports.register = function (server, options, next) {
   });
 
 
+  server.route({
+    method: 'PUT',
+    path: options.basePath + '/user/change-group',
+    config: {
+      auth: {
+        strategy: 'session',
+        scope: 'admin'
+      },
+      validate: {
+        payload: {
+          opType: Joi.string().required(),
+          id: Joi.string().required(),
+          username: Joi.string().required(),
+          oldGroup: Joi.string(),
+          newGroup: Joi.string()
+        }
+      },
+      pre: [
+        AuthPlugin.preware.ensureAdminGroup('root')
+      ]
+    },
+    handler: function (request, reply) {
+      var User = request.server.plugins['hapi-mongo-models'].User;
+      var UserRequest = request.server.plugins['hapi-mongo-models'].UserRequest;
+      var Session = request.server.plugins['hapi-mongo-models'].Session;
+      Async.auto({
+        user: function (done) {
+          var userFilter = {
+            username: request.payload.username,
+            group: request.payload.oldGroup
+          };
+          var userUpdate = {
+            $set: {
+              group: request.payload.newGroup
+            }
+          };
+          User.findOneAndUpdate(userFilter, userUpdate, done);
+        },
+        clearSession: ['user', function (done, results) {
+          var id = results.user._id.toString();
+          var filter = {
+            userId: id
+          };
+          Session.findOneAndDelete(filter, done);
+        }],
+        registerRequest: ['user', function (done, results) {
+
+          var document = {
+            user: {
+              id: request.auth.credentials.user._id.toString(),
+              name: request.auth.credentials.user.username
+            },
+            opType: request.payload.opType,
+            opParameter: {
+              oldGroup: request.payload.oldGroup,
+              newGroup: request.payload.newGroup
+            },
+            isClosed: true,
+            timeCreated: new Date(),
+            timeExecutor: new Date(),
+            executor: {
+              id: request.auth.credentials.user._id.toString(),
+              name: request.auth.credentials.user.username
+            }
+          };
+          UserRequest.insertOne(document, done);
+        }]
+      }, function (err, results) {
+        if (err) {
+          return reply(err);
+        }
+        if (!results.user) {
+          return reply({message: 'User not found.'}).code(404);
+        }
+        reply(results);
+      });
+    }
+  });
+
   next();
 };
 

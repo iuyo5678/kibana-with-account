@@ -134,7 +134,11 @@ exports.register = function (server, options, next) {
           var update = {
             $set: {
               isClosed: true,
-              timeExecutor: new Date()
+              timeExecutor: new Date(),
+              executor: {
+                id: request.auth.credentials.user._id.toString(),
+                name: request.auth.credentials.user.username
+              }
             }
           };
           UserRequest.findByIdAndUpdate(id, update, done);
@@ -151,17 +155,6 @@ exports.register = function (server, options, next) {
         }
         reply(results);
       });
-
-
-      var id = request.params.id;
-      var update = {
-        $set: {
-          isClosed: true,
-          timeExecutor: new Date()
-        }
-      };
-
-
     }
   });
 

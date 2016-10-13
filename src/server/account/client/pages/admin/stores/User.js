@@ -25,6 +25,7 @@ var Store = FluxStore.extend({
       hydrated: false,
       loading: false,
       success: false,
+      response: false,
       error: undefined,
       data: [],
       pages: {},
@@ -180,6 +181,23 @@ var Store = FluxStore.extend({
       this.emitChange();
     }
 
+    if (ActionTypes.CHANGE_GROUP_RESPONSE === action.type) {
+      if (action.data.error) {
+        this.state.userGroups.error = action.data.error;
+        setTimeout(function () {
+          this.state.userGroups.error = undefined;
+          self.emitChange();
+        }.bind(this), 1000);
+      } else {
+        this.state.userGroups.response = true;
+        setTimeout(function () {
+          this.state.userGroups.response = false;
+          self.emitChange();
+        }.bind(this), 1000);
+      }
+      this.emitChange();
+    }
+
     if (ActionTypes.CREATE_NEW === action.type) {
       this.state.createNew.loading = true;
       this.resetValidationErrors('createNew');
@@ -224,6 +242,7 @@ var Store = FluxStore.extend({
       this.state.identity.isActive = action.data.isActive;
       this.state.identity.username = action.data.username;
       this.state.identity.email = action.data.email;
+      this.state.identity.group = action.data.group;
       this.state.identity.role = action.data.role;
       this.emitChange();
     }

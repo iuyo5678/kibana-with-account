@@ -49,6 +49,27 @@ var Actions = {
       dispatch(SERVER_ACTION, Types.GET_GROUPS_ALL_RESPONSE, response);
     });
   },
+  saveUserGroupSettings: function (data) {
+    dispatch(VIEW_ACTION, Types.CHANGE_GROUP, data);
+
+    var request = {
+      method: 'PUT',
+      url: '/api/user/change-group',
+      data: data,
+      useAuth: true
+    };
+
+    fetch(request, function (err, response) {
+
+      if (!err) {
+        response.success = true;
+      } else {
+        response.error = err;
+      }
+
+      dispatch(SERVER_ACTION, Types.CHANGE_GROUP_RESPONSE, response);
+    });
+  },
   getIdentity: function (data) {
 
     dispatch(VIEW_ACTION, Types.GET_IDENTITY, data);

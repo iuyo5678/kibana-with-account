@@ -23,7 +23,8 @@ var Component = React.createClass({
         hydrated: nextProps.data.hydrated,
         isActive: nextProps.data.isActive,
         username: nextProps.data.username,
-        email: nextProps.data.email
+        email: nextProps.data.email,
+        group: nextProps.data.group
       });
     }
   },
@@ -36,7 +37,8 @@ var Component = React.createClass({
       id: this.props.data._id,
       isActive: this.state.isActive,
       username: this.state.username,
-      email: this.state.email
+      email: this.state.email,
+      group: this.state.group
     });
   },
   render: function () {
@@ -89,6 +91,14 @@ var Component = React.createClass({
           valueLink={this.linkState('email')}
           help={this.props.data.help.email}
           disabled={this.props.data.loading}
+        />
+        <TextControl
+          name="group"
+          label="UserGroup:"
+          hasError={this.props.data.hasError.userGroup}
+          valueLink={this.linkState('group')}
+          help={this.props.data.help.userGroup}
+          disabled="disabled"
         />
         <ControlGroup hideLabel={true} hideHelp={true}>
           <Button

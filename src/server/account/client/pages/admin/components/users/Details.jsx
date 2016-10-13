@@ -25,10 +25,11 @@ var Component = React.createClass({
     UserStore.resetUserGroups();
 
     Actions.getIdentity(this.context.router.getCurrentParams());
+    Actions.getUserGroups();
 
     return {
       identity: UserStore.getIdentity(),
-      userGroups: UserStore.getUserGroups(),
+      userGroup: UserStore.getUserGroups(),
       password: UserStore.getPassword(),
       delete: UserStore.getDelete()
     };
@@ -45,7 +46,7 @@ var Component = React.createClass({
 
     this.setState({
       identity: UserStore.getIdentity(),
-      userGroups: UserStore.getUserGroups(),
+      userGroup: UserStore.getUserGroups(),
       password: UserStore.getPassword(),
       delete: UserStore.getDelete()
     });

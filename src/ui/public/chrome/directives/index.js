@@ -1,6 +1,6 @@
 import 'ui/directives/config';
 
-import './app_switcher';
+//import './app_switcher';
 import kbnChromeProv from './kbn_chrome';
 import kbnChromeNavControlsProv from './append_nav_controls';
 

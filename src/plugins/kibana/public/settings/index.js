@@ -5,12 +5,11 @@ define(function (require, module, exports) {
   require('plugins/kibana/settings/styles/main.less');
   require('ui/filters/start_from');
 
-  /*
-   require('ui/routes')
-   .when('/settings', {
-   redirectTo: '/settings/indices'
-   });
-   */
+  require('ui/routes')
+    .when('/settings', {
+      redirectTo: '/settings/indices'
+    });
+
   require('ui/index_patterns/routeSetup/loadDefault')({
     notRequiredRe: /^\/settings\//,
     whenMissingRedirectTo: '/settings/indices'
@@ -40,6 +39,4 @@ define(function (require, module, exports) {
 
   // preload
   require('ui/field_editor');
-  require('plugins/kibana/settings/sections/indices/_indexed_fields');
-  require('plugins/kibana/settings/sections/indices/_scripted_fields');
 });

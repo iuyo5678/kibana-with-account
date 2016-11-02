@@ -46,11 +46,6 @@
           </a>
         </li>
 
-        <li class="to-body" ng-class="{ active: appSwitcherTemplate.is('switcher') }" ng-if="chrome.getShowAppsLink()">
-          <a ng-click="appSwitcherTemplate.toggle('switcher')">
-            <i class="fa fa-th" alt="Show app switcher"></i>
-          </a>
-        </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown" dropdown="">
@@ -66,13 +61,6 @@
     </div>
     <!-- /Full navbar -->
   </nav>
-
-  <!-- TODO: These config dropdowns shouldn't be hard coded -->
-  <config
-    config-template="appSwitcherTemplate"
-    config-object="chrome"
-    config-close="appSwitcherTemplate.close">
-  </config>
 
   <config
     ng-show="timefilter.enabled"

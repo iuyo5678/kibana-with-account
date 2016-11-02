@@ -81,11 +81,6 @@ define(function (require) {
           kbnUrl.change('/settings/objects/{{ service }}/{{ id }}', params);
         };
 
-        $scope.bulkDelete = function () {
-          $scope.currentTab.service.delete(_.pluck($scope.selectedItems, 'id')).then(refreshData).then(function () {
-            $scope.selectedItems.length = 0;
-          });
-        };
 
         $scope.bulkExport = function () {
           var objs = $scope.selectedItems.map(_.partialRight(_.extend, {type: $scope.currentTab.type}));

@@ -47,13 +47,12 @@ chrome
   {
     id: 'dashboard',
     title: 'Dashboard'
-  }
-  /*
-    {
+  },
+  {
     id: 'settings',
     title: 'Settings'
   }
-  */
+
 ])
 .setRootController('kibana', function ($scope, $rootScope, courier, config) {
   function setDefaultTimezone() {

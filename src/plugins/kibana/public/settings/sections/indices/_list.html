@@ -1,0 +1,38 @@
+<div class="col-md-10 sidebar-container">
+  <div class="sidebar-list">
+    <div class="sidebar-list-header">
+      <h6>
+        Exists Index Patterns&nbsp;
+      </h6>
+    </div>
+    <ul class="list-unstyled">
+      <li
+        ng-if="!defaultIndex"
+        class="sidebar-item">
+        <div class="sidebar-item-title full-title">
+          <span class="label label-warning">Warning</span> The user group which you belong to has not yet added any
+          data, please contact your system administrator to add the appropriate data.
+        </div>
+      </li>
+      <li
+        ng-repeat="pattern in indexPatternList | orderBy:['-default','id'] track by pattern.id "
+        class="sidebar-item indices">
+        <a href="{{::pattern.url}}">
+          <div class="{{::pattern.class}}">
+            <i aria-hidden="true" ng-if="pattern.default" class="fa fa-star"></i>
+            <span ng-bind="::pattern.id"></span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="col-md-2 sidebar-right">
+  <p>In order to use Kibana you must configure at least one index pattern. Index patterns are
+  used to identify the Elasticsearch index to run search and analytics against. They are also
+  used to configure fields.</p>
+</div>
+
+
+
+

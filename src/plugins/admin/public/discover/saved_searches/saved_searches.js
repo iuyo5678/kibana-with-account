@@ -40,9 +40,9 @@ define(function (require) {
       return scanner.scanAndMap(queryString, {
           pageSize,
           docCount: Infinity
-        }, (hit) = > this.mapHits(hit)
-      )
-      ;
+        },
+          (hit) => this.mapHits(hit)
+      );
     };
 
 
@@ -90,15 +90,13 @@ define(function (require) {
           body: body,
           size: size
         })
-          .then((resp) = > {
+          .then((resp) => {
           return {
             total: resp.hits.total,
-            hits: resp.hits.hits.map((hit) = > this.mapHits(hit)
+            hits: resp.hits.hits.map((hit) => this.mapHits(hit)
       )
-    }
-      ;
-    })
-      ;
+    };
+    });
     };
   });
 });

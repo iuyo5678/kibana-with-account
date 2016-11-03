@@ -2,8 +2,8 @@ define(function (require) {
   var _ = require('lodash');
   var angular = require('angular');
   var saveAs = require('@spalger/filesaver').saveAs;
-  var registry = require('plugins/admin/settings/saved_object_registry');
-  var objectIndexHTML = require('plugins/admin/settings/sections/objects/_objects.html');
+  var registry = require('plugins/kibana/settings/saved_object_registry');
+  var objectIndexHTML = require('plugins/kibana/settings/sections/objects/_objects.html');
   const MAX_SIZE = Math.pow(2, 31) - 1;
 
   require('ui/directives/file_upload');
@@ -18,7 +18,7 @@ define(function (require) {
       return {
         restrict: 'E',
         controller: function ($scope, $injector, $q, AppState, es) {
-          var notify = new Notifier({location: 'Saved Objects'});
+          var notify = new Notifier({ location: 'Saved Objects' });
 
           var $state = $scope.state = new AppState();
           $scope.currentTab = null;
@@ -81,31 +81,19 @@ define(function (require) {
             kbnUrl.change('/settings/objects/{{ service }}/{{ id }}', params);
           };
 
-          $scope.bulkDelete = function () {
-            $scope.currentTab.service.delete(_.pluck($scope.selectedItems, 'id')).then(refreshData).then(function () {
-              $scope.selectedItems.length = 0;
-            });
-          };
 
           $scope.bulkExport = function () {
             var objs = $scope.selectedItems.map(_.partialRight(_.extend, {type: $scope.currentTab.type}));
             retrieveAndExportDocs(objs);
           };
 
-          $scope.exportAll = () =
-          >
-          {
-            Promise.map($scope.services, (service) = >
-            service.service.scanAll('').then((results) = >
-            results.hits.map((hit) = > _.extend(hit, {type: service.type})
+          $scope.exportAll = () => {
+            Promise.map($scope.services, (service) =>
+            service.service.scanAll('').then((results) =>
+            results.hits.map((hit) => _.extend(hit, {type: service.type}))
           )
-          )
-          ).
-            then((results) = > retrieveAndExportDocs(_.flattenDeep(results))
-          )
-            ;
-          }
-          ;
+          ).then((results) => retrieveAndExportDocs(_.flattenDeep(results)));
+          };
 
           function retrieveAndExportDocs(objs) {
             if (!objs.length) return notify.error('No saved objects to export.');

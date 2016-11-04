@@ -44,7 +44,7 @@ var Component = React.createClass({
       <div className="navbar navbar-inverse navbar-fixed-top">
         <div className="container">
           <div className="navbar-header">
-            <a className="navbar-brand" href="/">
+            <a className="navbar-brand" href="/app/admin">
               <img
                 className="navbar-logo"
                 src="/bundles/public/media/logo-pingan-inverse.png"

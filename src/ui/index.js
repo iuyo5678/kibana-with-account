@@ -5,6 +5,7 @@ module.exports = async (kbnServer, server, config) => {
   let { resolve } = require('path');
   let readFile = require('fs').readFileSync;
 
+  let AuthPlugin = require('../server/account/auth');
   let fromRoot = require('../utils/fromRoot');
   let UiExports = require('./UiExports');
   let UiBundle = require('./UiBundle');
@@ -44,6 +45,25 @@ module.exports = async (kbnServer, server, config) => {
   server.exposeStaticFile('/loading.gif', resolve(__dirname, 'public/loading.gif'));
 
   server.route({
+    path: '/app/admin',
+    method: 'GET',
+    config: {
+      auth: 'session',
+      pre: [
+        AuthPlugin.preware.ensureAdminGroup('root')
+      ],
+      handler: function (req, reply) {
+        let id = 'admin';
+        let app = uiExports.apps.byId[id];
+        if (!app) return reply(Boom.notFound('Unknown app ' + id));
+
+        return reply.renderApp(app, req.auth.artifacts.user.index);
+
+      }
+    }
+  });
+
+  server.route({
     path: '/app/{id}',
     method: 'GET',
     config: {
@@ -62,6 +82,8 @@ module.exports = async (kbnServer, server, config) => {
       }
     }
   });
+
+
 
   const defaultInjectedVars = {};
 

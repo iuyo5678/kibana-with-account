@@ -1,6 +1,6 @@
 var Joi = require('joi');
 var Async = require('async');
-var Bcrypt = require('bcrypt');
+var Bcrypt = require('bcryptjs');
 var objectAssign = require('object-assign');
 var BaseModel = require('hapi-mongo-models').BaseModel;
 var AdminRole = require('./admin-role');

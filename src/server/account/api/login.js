@@ -1,7 +1,7 @@
 var Joi = require('joi');
 var Hoek = require('hoek');
 var Async = require('async');
-var Bcrypt = require('bcrypt');
+var Bcrypt = require('bcryptjs');
 var Config = require('../config');
 
 

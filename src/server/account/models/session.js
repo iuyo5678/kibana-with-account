@@ -1,7 +1,7 @@
 var Joi = require('joi');
 var Uuid = require('node-uuid');
 var Async = require('async');
-var Bcrypt = require('bcrypt');
+var Bcrypt = require('bcryptjs');
 var objectAssign = require('object-assign');
 var BaseModel = require('hapi-mongo-models').BaseModel;
 

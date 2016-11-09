@@ -10,7 +10,7 @@ exports.register = function (plugin, options, next) {
     },
     handler: function (request, reply) {
       if (request.auth.credentials.role.name === 'root') {
-        return reply.redirect('/admin');
+        return reply.redirect('/kibana-admin');
       }
 
       reply.view('account/index.jsx');

@@ -20,7 +20,7 @@ exports.register = function (plugin, options, next) {
         request.auth.isAuthenticated) {
 
         if (request.auth.credentials.role.name === 'root') {
-          return reply.redirect('/admin');
+          return reply.redirect('/kibana-admin');
         }
 
         return reply.redirect('/xiangyun-log');

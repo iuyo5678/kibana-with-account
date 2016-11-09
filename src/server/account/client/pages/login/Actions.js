@@ -52,7 +52,7 @@ var Actions = {
         }
         else if (response.user.role.name === 'root') {
 
-          window.location.href = '/admin';
+          window.location.href = '/kibana-admin';
         }
         else {
           cookie.save('index', response.user.index);

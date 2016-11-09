@@ -20,7 +20,7 @@ var NotFoundRoute = ReactRouter.NotFoundRoute;
 
 
 var routes = (
-  <Route path="/admin" name="app" handler={App}>
+  <Route path="/kibana-admin" name="app" handler={App}>
     <DefaultRoute name="home" handler={Home}/>
     <NotFoundRoute name="notFound" handler={NotFound}/>
 

@@ -24,8 +24,8 @@ coverage
 .lock-wscript
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
-build/
-target/
+/build
+target
 optimize/bundles
 optimize/testdev
 optimize/testUiServer
@@ -54,5 +54,13 @@ config/kibana.dev.yml
 *.out
 *~
 test/output
-trash
+*.iml
 
+trash
+/esvm
+.htpasswd
+.eslintcache
+installedPlugins
+disabledPlugins
+webpackstats.json
+selenium

@@ -2,7 +2,7 @@ exports.register = function (plugin, options, next) {
 
   plugin.route({
     method: 'GET',
-    path: '/admin/{glob*}',
+    path: '/kibana-admin/{glob*}',
     config: {
       auth: {
         strategy: 'session',

@@ -1,5 +1,5 @@
 var Joi = require('joi');
-var Uuid = require('node-uuid');
+var Uuid = require('uuid');
 var Async = require('async');
 var Bcrypt = require('bcryptjs');
 var objectAssign = require('object-assign');
